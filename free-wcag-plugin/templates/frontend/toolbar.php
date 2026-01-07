@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                     <legend><?php esc_html_e( 'Contrast', 'free-wcag' ); ?></legend>
                     <div class="wpa11y-button-group" role="radiogroup" aria-label="<?php esc_attr_e( 'Contrast options', 'free-wcag' ); ?>">
                         <button role="radio" 
-                                aria-checked="false" 
+                                aria-checked="true" 
                                 data-action="contrast" 
                                 data-value="default"
                                 class="wpa11y-option-btn is-active">
@@ -64,19 +64,22 @@ if ( ! defined( 'ABSPATH' ) ) {
                         <button role="radio" 
                                 aria-checked="false" 
                                 data-action="contrast" 
-                                data-value="high-dark">
+                                data-value="high-dark"
+                                class="wpa11y-option-btn">
                             <?php esc_html_e( 'Dark', 'free-wcag' ); ?>
                         </button>
                         <button role="radio" 
                                 aria-checked="false" 
                                 data-action="contrast" 
-                                data-value="high-light">
+                                data-value="high-light"
+                                class="wpa11y-option-btn">
                             <?php esc_html_e( 'Light', 'free-wcag' ); ?>
                         </button>
                         <button role="radio" 
                                 aria-checked="false" 
                                 data-action="contrast" 
-                                data-value="yellow-black">
+                                data-value="yellow-black"
+                                class="wpa11y-option-btn">
                             <?php esc_html_e( 'Yellow', 'free-wcag' ); ?>
                         </button>
                     </div>
@@ -264,6 +267,12 @@ if ( ! defined( 'ABSPATH' ) ) {
             <button type="button" class="wpa11y-reset" data-action="reset">
                 <?php esc_html_e( 'Reset All Settings', 'free-wcag' ); ?>
             </button>
+            <a href="http://thedeveloper.co.uk/wcag/" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               class="wpa11y-credit">
+                <?php esc_html_e( 'Free WP WCAG', 'free-wcag' ); ?>
+            </a>
         </footer>
     </div>
 </div>

@@ -112,12 +112,12 @@ html {
    ========================================================================== */
 
 /* Grayscale */
-[data-a11y-grayscale="true"] body {
+[data-a11y-grayscale="true"] body > *:not(.wpa11y-toolbar):not(.wpa11y-reading-guide):not(.wpa11y-reading-mask) {
     filter: grayscale(1);
 }
 
 /* Invert Colors */
-[data-a11y-invert-colors="true"] body {
+[data-a11y-invert-colors="true"] body > *:not(.wpa11y-toolbar):not(.wpa11y-reading-guide):not(.wpa11y-reading-mask) {
     filter: invert(1) hue-rotate(180deg);
 }
 
@@ -127,7 +127,7 @@ html {
 }
 
 /* Low Saturation */
-[data-a11y-low-saturation="true"] body {
+[data-a11y-low-saturation="true"] body > *:not(.wpa11y-toolbar):not(.wpa11y-reading-guide):not(.wpa11y-reading-mask) {
     filter: saturate(0.5);
 }
 
@@ -236,6 +236,10 @@ html {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: 14px;
     line-height: 1.5;
+    /* Ensure toolbar is unaffected by body filters */
+    filter: none !important;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 /* Position variants */
@@ -411,27 +415,28 @@ html {
 
 /* Button Group (Radio-style) */
 .wpa11y-button-group {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
 }
 
 .wpa11y-option-btn {
-    flex: 1;
-    min-width: 60px;
-    padding: 8px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 6px;
-    background: transparent;
+    padding: 10px 8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
     color: var(--wpa11y-toolbar-text);
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 11px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
+    text-align: center;
 }
 
 .wpa11y-option-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
 }
 
 .wpa11y-option-btn:focus {
@@ -443,6 +448,42 @@ html {
 .wpa11y-option-btn[aria-checked="true"] {
     background: var(--wpa11y-toolbar-accent);
     border-color: var(--wpa11y-toolbar-accent);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(74, 144, 217, 0.4);
+}
+
+/* Contrast button specific colors */
+.wpa11y-option-btn[data-value="high-dark"] {
+    background: linear-gradient(135deg, #1a1a1a 50%, #333 50%);
+}
+
+.wpa11y-option-btn[data-value="high-light"] {
+    background: linear-gradient(135deg, #fff 50%, #f0f0f0 50%);
+    color: #000;
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.wpa11y-option-btn[data-value="yellow-black"] {
+    background: linear-gradient(135deg, #bebebe 50%, #ffff00 50%);
+    color: #000000;
+}
+
+.wpa11y-option-btn[data-value="high-dark"].is-active,
+.wpa11y-option-btn[data-value="high-dark"][aria-checked="true"] {
+    border-color: #fff;
+    box-shadow: 0 0 0 2px #fff;
+}
+
+.wpa11y-option-btn[data-value="high-light"].is-active,
+.wpa11y-option-btn[data-value="high-light"][aria-checked="true"] {
+    border-color: #000;
+    box-shadow: 0 0 0 2px #000;
+}
+
+.wpa11y-option-btn[data-value="yellow-black"].is-active,
+.wpa11y-option-btn[data-value="yellow-black"][aria-checked="true"] {
+    border-color: #ffff00;
+    box-shadow: 0 0 0 2px #ffff00;
 }
 
 /* Slider Option */
@@ -619,6 +660,26 @@ html {
 .wpa11y-reset:focus {
     outline: 2px solid var(--wpa11y-toolbar-accent);
     outline-offset: 2px;
+}
+
+.wpa11y-credit {
+    display: block;
+    margin-top: 12px;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.wpa11y-credit:hover {
+    color: var(--wpa11y-toolbar-accent);
+}
+
+.wpa11y-credit:focus {
+    outline: 2px solid var(--wpa11y-toolbar-accent);
+    outline-offset: 2px;
+    color: var(--wpa11y-toolbar-text);
 }
 
 /* ==========================================================================

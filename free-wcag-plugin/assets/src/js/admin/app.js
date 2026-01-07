@@ -171,12 +171,57 @@ window.wpa11yScanner = function() {
         severityFilter: '',
         currentBatch: 0,
         totalBatches: 0,
+        scannerSettings: {
+            excludedTypes: JSON.parse(JSON.stringify(window.wpa11ySettings?.scanner?.excluded_types || [])),
+            maxPages: String(window.wpa11ySettings?.scanner?.max_pages || 0),
+        },
         
         /**
          * Initialize scanner
          */
         init() {
             this.loadResults();
+        },
+        
+        /**
+         * Toggle a post type inclusion
+         */
+        togglePostType(postType) {
+            const index = this.scannerSettings.excludedTypes.indexOf(postType);
+            if (index > -1) {
+                this.scannerSettings.excludedTypes.splice(index, 1);
+            } else {
+                this.scannerSettings.excludedTypes.push(postType);
+            }
+            this.saveSettings();
+        },
+        
+        /**
+         * Save scanner settings
+         */
+        async saveSettings() {
+            try {
+                const currentSettings = JSON.parse(JSON.stringify(window.wpa11ySettings || {}));
+                currentSettings.scanner = currentSettings.scanner || {};
+                currentSettings.scanner.excluded_types = this.scannerSettings.excludedTypes;
+                currentSettings.scanner.max_pages = parseInt(this.scannerSettings.maxPages, 10);
+                
+                const response = await fetch(`${window.wpa11yRest.root}wpa11y/v1/settings`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-WP-Nonce': window.wpa11yRest.nonce,
+                    },
+                    body: JSON.stringify(currentSettings),
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    window.wpa11ySettings = data.settings;
+                }
+            } catch (error) {
+                console.error('Failed to save scanner settings:', error);
+            }
         },
         
         /**
@@ -214,14 +259,18 @@ window.wpa11yScanner = function() {
             this.results = [];
             
             try {
-                // Start scan via REST API
+                // Start scan via REST API with settings
                 const startResponse = await fetch(`${window.wpa11yRest.root}wpa11y/v1/scan/start`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-WP-Nonce': window.wpa11yRest.nonce,
                     },
-                    body: JSON.stringify({ type }),
+                    body: JSON.stringify({ 
+                        type,
+                        excluded_types: this.scannerSettings.excludedTypes,
+                        max_pages: parseInt(this.scannerSettings.maxPages, 10),
+                    }),
                 });
                 
                 if (!startResponse.ok) {

@@ -270,6 +270,16 @@ class WPA11Y_REST_Controller {
             $scan_type = 'full';
         }
 
+        // Get excluded types and max pages from request or settings
+        $settings       = WPA11Y_Settings::get_settings();
+        $excluded_types = isset( $body['excluded_types'] ) && is_array( $body['excluded_types'] )
+            ? array_map( 'sanitize_key', $body['excluded_types'] )
+            : ( $settings['scanner']['excluded_types'] ?? [] );
+        
+        $max_pages = isset( $body['max_pages'] ) 
+            ? absint( $body['max_pages'] ) 
+            : ( $settings['scanner']['max_pages'] ?? 0 );
+
         // Clear previous results using safe delete
         global $wpdb;
         $table = $wpdb->prefix . 'a11y_scan_results';
@@ -281,27 +291,45 @@ class WPA11Y_REST_Controller {
             "DELETE FROM `{$table}` WHERE resolved_at IS NULL"
         );
 
-        // Calculate total batches
-        $settings   = WPA11Y_Settings::get_settings();
+        // Calculate total batches based on selected post types
         $batch_size = $settings['scanner']['batch_size'] ?? 50;
 
-        $total_posts   = wp_count_posts( 'post' )->publish + wp_count_posts( 'page' )->publish;
-        $total_batches = ceil( $total_posts / $batch_size );
+        // Get all public post types except excluded ones
+        $all_types   = get_post_types( [ 'public' => true ], 'names' );
+        $scan_types  = array_diff( $all_types, $excluded_types, [ 'attachment' ] );
+        
+        // Count posts across all scannable types
+        $total_posts = 0;
+        foreach ( $scan_types as $type ) {
+            $counts = wp_count_posts( $type );
+            $total_posts += $counts->publish ?? 0;
+        }
+
+        // Apply max pages limit
+        if ( $max_pages > 0 && $total_posts > $max_pages ) {
+            $total_posts = $max_pages;
+        }
+
+        $total_batches = max( 1, ceil( $total_posts / $batch_size ) );
 
         // Create scan ID
         $scan_id = wp_generate_uuid4();
 
         set_transient( 'wpa11y_scan_' . $scan_id, [
-            'type'          => $scan_type,
-            'total_batches' => $total_batches,
-            'current_batch' => 0,
-            'started_at'    => current_time( 'mysql' ),
+            'type'           => $scan_type,
+            'total_batches'  => $total_batches,
+            'current_batch'  => 0,
+            'started_at'     => current_time( 'mysql' ),
+            'excluded_types' => $excluded_types,
+            'max_pages'      => $max_pages,
+            'scan_types'     => array_values( $scan_types ),
         ], HOUR_IN_SECONDS );
 
         return new WP_REST_Response( [
             'scan_id'       => $scan_id,
             'total_batches' => $total_batches,
             'total_posts'   => $total_posts,
+            'post_types'    => array_values( $scan_types ),
         ], 200 );
     }
 
@@ -328,12 +356,35 @@ class WPA11Y_REST_Controller {
         // Process batch using AJAX handler logic
         $settings   = WPA11Y_Settings::get_settings();
         $batch_size = $settings['scanner']['batch_size'] ?? 50;
+        $max_pages  = $scan_data['max_pages'] ?? 0;
+
+        // Use post types from scan data, or default to post and page
+        $post_types = ! empty( $scan_data['scan_types'] ) 
+            ? $scan_data['scan_types'] 
+            : [ 'post', 'page' ];
+
+        $offset = $batch * $batch_size;
+
+        // If max_pages is set, limit the number of posts
+        $posts_per_page = $batch_size;
+        if ( $max_pages > 0 ) {
+            $remaining = $max_pages - $offset;
+            if ( $remaining <= 0 ) {
+                return new WP_REST_Response( [
+                    'batch'        => $batch,
+                    'processed'    => 0,
+                    'issues_found' => 0,
+                    'complete'     => true,
+                ], 200 );
+            }
+            $posts_per_page = min( $batch_size, $remaining );
+        }
 
         $args = [
-            'post_type'      => [ 'post', 'page' ],
+            'post_type'      => $post_types,
             'post_status'    => 'publish',
-            'posts_per_page' => $batch_size,
-            'offset'         => $batch * $batch_size,
+            'posts_per_page' => $posts_per_page,
+            'offset'         => $offset,
             'fields'         => 'ids',
         ];
 

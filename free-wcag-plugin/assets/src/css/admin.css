@@ -564,6 +564,104 @@ input:checked + .wpa11y-switch-small::after {
    Scanner Page
    ========================================================================== */
 
+/* Scanner Settings Panel */
+.wpa11y-scanner-settings {
+    background: var(--wpa11y-bg-card);
+    border: 1px solid var(--wpa11y-border);
+    border-radius: var(--wpa11y-radius);
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.wpa11y-scanner-settings h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--wpa11y-text);
+}
+
+.wpa11y-scanner-settings .description {
+    margin: 0 0 16px;
+    font-size: 13px;
+    color: var(--wpa11y-text-muted);
+}
+
+.wpa11y-settings-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+@media (max-width: 782px) {
+    .wpa11y-settings-row {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+}
+
+.wpa11y-setting-group {
+    padding: 16px;
+    background: var(--wpa11y-bg);
+    border-radius: 8px;
+}
+
+.wpa11y-post-types-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.wpa11y-post-type-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: var(--wpa11y-bg-card);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.wpa11y-post-type-checkbox:hover {
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.wpa11y-post-type-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--wpa11y-primary);
+}
+
+.wpa11y-post-type-label {
+    flex: 1;
+    font-size: 14px;
+    color: var(--wpa11y-text);
+}
+
+.wpa11y-post-type-count {
+    font-size: 12px;
+    color: var(--wpa11y-text-muted);
+    font-weight: 500;
+}
+
+.wpa11y-max-pages-select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 1px solid var(--wpa11y-border);
+    border-radius: 6px;
+    background: var(--wpa11y-bg-card);
+    color: var(--wpa11y-text);
+    cursor: pointer;
+}
+
+.wpa11y-max-pages-select:focus {
+    outline: none;
+    border-color: var(--wpa11y-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
 .wpa11y-scanner-controls {
     background: var(--wpa11y-bg-card);
     border: 1px solid var(--wpa11y-border);

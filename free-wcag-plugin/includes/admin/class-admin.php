@@ -159,8 +159,9 @@ class WPA11Y_Admin {
             [ 'strategy' => 'defer', 'in_footer' => true ]
         );
 
-        // Localize script data
-        wp_localize_script( 'wpa11y-admin', 'wpa11ySettings', $this->settings );
+        // Localize script data - always fetch fresh settings to ensure latest values
+        $fresh_settings = WPA11Y_Settings::get_settings();
+        wp_localize_script( 'wpa11y-admin', 'wpa11ySettings', $fresh_settings );
         wp_localize_script( 'wpa11y-admin', 'wpa11yRest', [
             'root'  => esc_url_raw( rest_url() ),
             'nonce' => wp_create_nonce( 'wp_rest' ),

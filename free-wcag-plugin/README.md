@@ -50,8 +50,7 @@ Issues and pull requests are welcome. Please open an issue first for major chang
 - Accessibility icon from WordPress Dashicons
 
 ## Support
-- WordPress.org support forums (preferred)
-- Donate link: https://example.com/donate
+- WordPress.org support forums (preferred) 
 
 ## License
 GPL-2.0-or-later. See `LICENSE` for details.

@@ -114,9 +114,11 @@ class WPA11Y_Settings {
 
             // Scanner settings
             'scanner' => [
-                'batch_size'      => 50,
-                'auto_scan'       => false,
-                'scan_on_publish' => true,
+                'batch_size'       => 50,
+                'auto_scan'        => false,
+                'scan_on_publish'  => true,
+                'max_pages'        => 0,     // 0 = unlimited
+                'excluded_types'   => [],    // Post types to exclude from scan
             ],
         ];
     }
@@ -144,8 +146,10 @@ class WPA11Y_Settings {
         
         update_option( self::OPTION_NAME, $sanitized, true );
         
-        // Clear any cached data
+        // Clear any cached data - both custom and WordPress option cache
         wp_cache_delete( 'wpa11y_settings', 'wpa11y' );
+        wp_cache_delete( self::OPTION_NAME, 'options' );
+        wp_cache_delete( 'alloptions', 'options' );
         
         /**
          * Fires after settings are saved.
@@ -211,8 +215,16 @@ class WPA11Y_Settings {
 
         foreach ( $modules as $module ) {
             if ( isset( $input[ $module ] ) ) {
+                // Get the enabled value - use explicit check instead of ?? false to handle boolean properly
+                $enabled_value = false;
+                if ( array_key_exists( 'enabled', $input[ $module ] ) ) {
+                    $enabled_value = $input[ $module ]['enabled'];
+                } elseif ( isset( $defaults[ $module ]['enabled'] ) ) {
+                    $enabled_value = $defaults[ $module ]['enabled'];
+                }
+
                 $sanitized[ $module ] = [
-                    'enabled'  => self::sanitize_bool( $input[ $module ]['enabled'] ?? false ),
+                    'enabled'  => self::sanitize_bool( $enabled_value ),
                     'features' => [],
                 ];
 
@@ -241,13 +253,32 @@ class WPA11Y_Settings {
         // Scanner settings
         if ( isset( $input['scanner'] ) ) {
             $sanitized['scanner'] = [
-                'batch_size'      => absint( $input['scanner']['batch_size'] ?? $defaults['scanner']['batch_size'] ),
-                'auto_scan'       => self::sanitize_bool( $input['scanner']['auto_scan'] ?? $defaults['scanner']['auto_scan'] ),
-                'scan_on_publish' => self::sanitize_bool( $input['scanner']['scan_on_publish'] ?? $defaults['scanner']['scan_on_publish'] ),
+                'batch_size'       => absint( $input['scanner']['batch_size'] ?? $defaults['scanner']['batch_size'] ),
+                'auto_scan'        => self::sanitize_bool( $input['scanner']['auto_scan'] ?? $defaults['scanner']['auto_scan'] ),
+                'scan_on_publish'  => self::sanitize_bool( $input['scanner']['scan_on_publish'] ?? $defaults['scanner']['scan_on_publish'] ),
+                'max_pages'        => absint( $input['scanner']['max_pages'] ?? $defaults['scanner']['max_pages'] ),
+                'excluded_types'   => [],
             ];
 
             // Enforce batch size limits
             $sanitized['scanner']['batch_size'] = max( 10, min( 100, $sanitized['scanner']['batch_size'] ) );
+
+            // Enforce max pages limit options (0, 10, 50, 100, 500, 1000)
+            $allowed_limits = [ 0, 10, 50, 100, 500, 1000 ];
+            if ( ! in_array( $sanitized['scanner']['max_pages'], $allowed_limits, true ) ) {
+                $sanitized['scanner']['max_pages'] = 0;
+            }
+
+            // Sanitize excluded post types
+            if ( isset( $input['scanner']['excluded_types'] ) && is_array( $input['scanner']['excluded_types'] ) ) {
+                $public_types = get_post_types( [ 'public' => true ], 'names' );
+                foreach ( $input['scanner']['excluded_types'] as $type ) {
+                    $type = sanitize_key( $type );
+                    if ( in_array( $type, $public_types, true ) ) {
+                        $sanitized['scanner']['excluded_types'][] = $type;
+                    }
+                }
+            }
         }
 
         // Merge with defaults to ensure complete structure
@@ -367,6 +398,31 @@ class WPA11Y_Settings {
         }
 
         return $value;
+    }
+
+    /**
+     * Get available post types for scanner.
+     *
+     * @return array Array of post type objects with name and label.
+     */
+    public static function get_scannable_post_types(): array {
+        $post_types = get_post_types( [ 'public' => true ], 'objects' );
+        $result     = [];
+
+        foreach ( $post_types as $post_type ) {
+            // Skip attachments
+            if ( 'attachment' === $post_type->name ) {
+                continue;
+            }
+
+            $result[] = [
+                'name'  => $post_type->name,
+                'label' => $post_type->labels->name,
+                'count' => wp_count_posts( $post_type->name )->publish,
+            ];
+        }
+
+        return $result;
     }
 }
 

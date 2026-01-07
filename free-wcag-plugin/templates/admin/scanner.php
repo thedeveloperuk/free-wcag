@@ -11,7 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$scan_summary = WPA11Y_Dashboard::get_scan_summary();
+$scan_summary   = WPA11Y_Dashboard::get_scan_summary();
+$settings       = WPA11Y_Settings::get_settings();
+$post_types     = WPA11Y_Settings::get_scannable_post_types();
+$excluded_types = $settings['scanner']['excluded_types'] ?? [];
+$max_pages      = $settings['scanner']['max_pages'] ?? 0;
 ?>
 
 <div class="wpa11y-admin wrap" x-data="wpa11yScanner()">
@@ -22,6 +26,42 @@ $scan_summary = WPA11Y_Dashboard::get_scan_summary();
             <?php esc_html_e( 'Accessibility Scanner', 'free-wcag' ); ?>
         </h1>
     </header>
+
+    <!-- Scanner Settings -->
+    <div class="wpa11y-scanner-settings">
+        <div class="wpa11y-settings-row">
+            <div class="wpa11y-setting-group">
+                <h3><?php esc_html_e( 'Content to Scan', 'free-wcag' ); ?></h3>
+                <p class="description"><?php esc_html_e( 'Select which post types to include in the scan.', 'free-wcag' ); ?></p>
+                <div class="wpa11y-post-types-grid">
+                    <?php foreach ( $post_types as $pt ) : ?>
+                    <label class="wpa11y-post-type-checkbox">
+                        <input type="checkbox" 
+                               :checked="!scannerSettings.excludedTypes.includes('<?php echo esc_attr( $pt['name'] ); ?>')"
+                               @change="togglePostType('<?php echo esc_attr( $pt['name'] ); ?>')">
+                        <span class="wpa11y-post-type-label">
+                            <?php echo esc_html( $pt['label'] ); ?>
+                            <span class="wpa11y-post-type-count">(<?php echo esc_html( $pt['count'] ); ?>)</span>
+                        </span>
+                    </label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <div class="wpa11y-setting-group">
+                <h3><?php esc_html_e( 'Scan Limit', 'free-wcag' ); ?></h3>
+                <p class="description"><?php esc_html_e( 'Maximum number of pages to scan. Useful for large sites.', 'free-wcag' ); ?></p>
+                <select x-model="scannerSettings.maxPages" @change="saveSettings()" class="wpa11y-max-pages-select">
+                    <option value="0"><?php esc_html_e( 'Unlimited', 'free-wcag' ); ?></option>
+                    <option value="10">10 <?php esc_html_e( 'pages', 'free-wcag' ); ?></option>
+                    <option value="50">50 <?php esc_html_e( 'pages', 'free-wcag' ); ?></option>
+                    <option value="100">100 <?php esc_html_e( 'pages', 'free-wcag' ); ?></option>
+                    <option value="500">500 <?php esc_html_e( 'pages', 'free-wcag' ); ?></option>
+                    <option value="1000">1000 <?php esc_html_e( 'pages', 'free-wcag' ); ?></option>
+                </select>
+            </div>
+        </div>
+    </div>
 
     <!-- Scan Controls -->
     <div class="wpa11y-scanner-controls">
