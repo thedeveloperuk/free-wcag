@@ -1,0 +1,139 @@
+/**
+ * WP Accessibility Suite - Remediation Styles
+ * Always-on accessibility fixes applied to the frontend.
+ * 
+ * @package WP_Accessibility_Suite
+ * @since 1.0.0
+ */
+
+/* ==========================================================================
+   Focus Ring Enforcement
+   WCAG 2.4.7 - Focus Visible
+   ========================================================================== */
+
+:focus {
+    outline: 2px solid var(--wpa11y-focus-ring, #0066cc);
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--wpa11y-focus-ring, #0066cc);
+    outline-offset: 2px;
+}
+
+@supports selector(:focus-visible) {
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible,
+    [role="button"]:focus-visible,
+    [tabindex]:focus-visible {
+        outline: 2px solid var(--wpa11y-focus-ring, #0066cc);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.3);
+    }
+}
+
+/* ==========================================================================
+   Link Highlighting - WCAG 1.4.1
+   ========================================================================== */
+
+p a, li a, td a, dd a, figcaption a, blockquote a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+}
+
+p a:hover, li a:hover, td a:hover {
+    text-decoration-thickness: 2px;
+}
+
+/* ==========================================================================
+   Skip Links - WCAG 2.4.1
+   ========================================================================== */
+
+.wpa11y-skip-links {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100000;
+}
+
+.wpa11y-skip-link {
+    position: absolute;
+    top: -100px;
+    left: 10px;
+    padding: 12px 24px;
+    background: #000;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    transition: top 0.2s ease-in-out;
+}
+
+.wpa11y-skip-link:focus {
+    top: 0;
+    outline: 3px solid #ffff00;
+    outline-offset: 2px;
+}
+
+/* Screen Reader Text */
+.wpa11y-screen-reader-text,
+.screen-reader-text {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0,0,0,0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* ==========================================================================
+   Target Size - WCAG 2.5.8
+   ========================================================================== */
+
+a, button, input[type="button"], input[type="submit"],
+input[type="checkbox"], input[type="radio"], select,
+[role="button"], [tabindex]:not([tabindex="-1"]) {
+    min-height: 24px;
+    min-width: 24px;
+}
+
+input[type="checkbox"], input[type="radio"] {
+    width: 24px;
+    height: 24px;
+}
+
+/* ==========================================================================
+   Motion Control - WCAG 2.2.2, 2.3.1
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+@media (forced-colors: active) {
+    :focus { outline: 3px solid CanvasText; }
+    a { text-decoration: underline; }
+    button, [role="button"] { border: 2px solid ButtonText; }
+}
+

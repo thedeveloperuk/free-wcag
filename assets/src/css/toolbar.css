@@ -1,0 +1,763 @@
+/**
+ * WP Accessibility Suite - Frontend Toolbar Styles
+ * 
+ * @package WP_Accessibility_Suite
+ * @since 1.0.0
+ */
+
+/* ==========================================================================
+   CSS Variables
+   ========================================================================== */
+
+:root {
+    /* Base theme */
+    --wpa11y-bg-primary: #ffffff;
+    --wpa11y-bg-secondary: #f5f5f5;
+    --wpa11y-text-primary: #1a1a1a;
+    --wpa11y-text-secondary: #4a4a4a;
+    --wpa11y-link-color: #0066cc;
+    --wpa11y-focus-ring: #0066cc;
+    --wpa11y-border-color: #e0e0e0;
+    
+    /* Typography */
+    --wpa11y-font-scale: 1;
+    --wpa11y-letter-spacing: normal;
+    --wpa11y-word-spacing: normal;
+    --wpa11y-line-height: 1.5;
+    --wpa11y-font-family: inherit;
+    
+    /* Toolbar */
+    --wpa11y-toolbar-bg: #1a1a2e;
+    --wpa11y-toolbar-text: #ffffff;
+    --wpa11y-toolbar-accent: #4a90d9;
+    --wpa11y-toolbar-radius: 12px;
+    --wpa11y-toolbar-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* ==========================================================================
+   High Contrast Modes
+   ========================================================================== */
+
+/* High Contrast - Dark */
+[data-a11y-contrast="high-dark"] {
+    --wpa11y-bg-primary: #000000 !important;
+    --wpa11y-bg-secondary: #1a1a1a !important;
+    --wpa11y-text-primary: #ffffff !important;
+    --wpa11y-text-secondary: #e0e0e0 !important;
+    --wpa11y-link-color: #ffff00 !important;
+    --wpa11y-focus-ring: #ffff00 !important;
+    --wpa11y-border-color: #ffffff !important;
+}
+
+[data-a11y-contrast="high-dark"] body {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+[data-a11y-contrast="high-dark"] a {
+    color: #ffff00 !important;
+}
+
+[data-a11y-contrast="high-dark"] img {
+    filter: brightness(0.9) contrast(1.1);
+}
+
+/* High Contrast - Light */
+[data-a11y-contrast="high-light"] {
+    --wpa11y-bg-primary: #ffffff !important;
+    --wpa11y-bg-secondary: #f0f0f0 !important;
+    --wpa11y-text-primary: #000000 !important;
+    --wpa11y-text-secondary: #1a1a1a !important;
+    --wpa11y-link-color: #0000ee !important;
+    --wpa11y-focus-ring: #000000 !important;
+}
+
+[data-a11y-contrast="high-light"] body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+[data-a11y-contrast="high-light"] a {
+    color: #0000ee !important;
+    text-decoration: underline !important;
+}
+
+/* Yellow on Black */
+[data-a11y-contrast="yellow-black"] {
+    --wpa11y-bg-primary: #000000 !important;
+    --wpa11y-text-primary: #ffff00 !important;
+    --wpa11y-link-color: #00ffff !important;
+    --wpa11y-focus-ring: #ffff00 !important;
+}
+
+[data-a11y-contrast="yellow-black"] body {
+    background-color: #000000 !important;
+    color: #ffff00 !important;
+}
+
+[data-a11y-contrast="yellow-black"] a {
+    color: #00ffff !important;
+}
+
+/* ==========================================================================
+   Font Size Scaling
+   ========================================================================== */
+
+html {
+    font-size: calc(1rem * var(--wpa11y-font-scale, 1));
+}
+
+/* ==========================================================================
+   Visual Filters
+   ========================================================================== */
+
+/* Grayscale */
+[data-a11y-grayscale="true"] body {
+    filter: grayscale(1);
+}
+
+/* Invert Colors */
+[data-a11y-invert-colors="true"] body {
+    filter: invert(1) hue-rotate(180deg);
+}
+
+[data-a11y-invert-colors="true"] img,
+[data-a11y-invert-colors="true"] video {
+    filter: invert(1) hue-rotate(180deg);
+}
+
+/* Low Saturation */
+[data-a11y-low-saturation="true"] body {
+    filter: saturate(0.5);
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/* Readable Font (Atkinson Hyperlegible) */
+[data-a11y-font="readable"] body {
+    font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* Dyslexia Font (OpenDyslexic) */
+[data-a11y-font="dyslexia"] body {
+    font-family: 'OpenDyslexic', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    letter-spacing: 0.05em;
+    word-spacing: 0.1em;
+}
+
+/* Text Spacing */
+[data-a11y-text-spacing="true"] body {
+    letter-spacing: 0.12em !important;
+    word-spacing: 0.16em !important;
+    line-height: 1.8 !important;
+}
+
+[data-a11y-text-spacing="true"] p {
+    margin-bottom: 2em !important;
+}
+
+/* ==========================================================================
+   Cursor
+   ========================================================================== */
+
+[data-a11y-cursor="large"] * {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath fill='%23000' stroke='%23fff' stroke-width='2' d='M8 8L32 32L20 32L16 44L8 8Z'/%3E%3C/svg%3E") 8 8, auto !important;
+}
+
+[data-a11y-cursor="large"] a,
+[data-a11y-cursor="large"] button,
+[data-a11y-cursor="large"] [role="button"] {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath fill='%23000' stroke='%23fff' stroke-width='2' d='M16 4L16 36L22 30L28 42L34 40L28 28L36 28L16 4Z'/%3E%3C/svg%3E") 16 4, pointer !important;
+}
+
+/* ==========================================================================
+   Reading Aids
+   ========================================================================== */
+
+/* Highlight Links */
+[data-a11y-highlight-links="true"] a {
+    background: #ffff00 !important;
+    color: #000000 !important;
+    padding: 2px 4px !important;
+    text-decoration: underline !important;
+    box-decoration-break: clone;
+}
+
+/* Highlight Headings */
+[data-a11y-highlight-headings="true"] h1,
+[data-a11y-highlight-headings="true"] h2,
+[data-a11y-highlight-headings="true"] h3,
+[data-a11y-highlight-headings="true"] h4,
+[data-a11y-highlight-headings="true"] h5,
+[data-a11y-highlight-headings="true"] h6 {
+    background: #e6f3ff !important;
+    border-left: 4px solid #0066cc !important;
+    padding: 8px 12px !important;
+}
+
+/* Hide Images */
+[data-a11y-hide-images="true"] img,
+[data-a11y-hide-images="true"] svg,
+[data-a11y-hide-images="true"] video,
+[data-a11y-hide-images="true"] [role="img"] {
+    visibility: hidden !important;
+}
+
+/* ==========================================================================
+   Animation Control
+   ========================================================================== */
+
+[data-a11y-motion="reduce"] *,
+[data-a11y-motion="reduce"] *::before,
+[data-a11y-motion="reduce"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+}
+
+/* Respect OS preference */
+@media (prefers-reduced-motion: reduce) {
+    :root:not([data-a11y-motion="allow"]) * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ==========================================================================
+   Toolbar Component
+   ========================================================================== */
+
+.wpa11y-toolbar {
+    position: fixed;
+    z-index: 999999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Position variants */
+.wpa11y-toolbar[data-position="left"] {
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.wpa11y-toolbar[data-position="right"] {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.wpa11y-toolbar[data-position="bottom"] {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Trigger Button */
+.wpa11y-trigger {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--wpa11y-toolbar-bg);
+    color: var(--wpa11y-toolbar-text);
+    box-shadow: var(--wpa11y-toolbar-shadow);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wpa11y-trigger:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+}
+
+.wpa11y-trigger:focus {
+    outline: 3px solid var(--wpa11y-toolbar-accent);
+    outline-offset: 3px;
+}
+
+.wpa11y-trigger svg {
+    width: 28px;
+    height: 28px;
+}
+
+.wpa11y-trigger[aria-expanded="true"] {
+    background: var(--wpa11y-toolbar-accent);
+}
+
+/* Panel */
+.wpa11y-panel {
+    position: absolute;
+    width: 340px;
+    max-height: 80vh;
+    background: var(--wpa11y-toolbar-bg);
+    border-radius: var(--wpa11y-toolbar-radius);
+    box-shadow: var(--wpa11y-toolbar-shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.wpa11y-panel[hidden] {
+    display: none;
+}
+
+/* Panel positioning based on trigger position */
+.wpa11y-toolbar[data-position="left"] .wpa11y-panel {
+    left: 70px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.wpa11y-toolbar[data-position="right"] .wpa11y-panel {
+    right: 70px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.wpa11y-toolbar[data-position="bottom"] .wpa11y-panel {
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Header */
+.wpa11y-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wpa11y-header h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--wpa11y-toolbar-text);
+}
+
+.wpa11y-close {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--wpa11y-toolbar-text);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.wpa11y-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.wpa11y-close:focus {
+    outline: 2px solid var(--wpa11y-toolbar-accent);
+    outline-offset: 2px;
+}
+
+/* Content */
+.wpa11y-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+}
+
+/* Sections */
+.wpa11y-section {
+    margin-bottom: 24px;
+}
+
+.wpa11y-section:last-child {
+    margin-bottom: 0;
+}
+
+.wpa11y-section h3 {
+    margin: 0 0 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Option Groups */
+.wpa11y-option-group {
+    border: none;
+    margin: 0 0 16px;
+    padding: 0;
+}
+
+.wpa11y-option-group legend {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--wpa11y-toolbar-text);
+    margin-bottom: 8px;
+}
+
+/* Button Group (Radio-style) */
+.wpa11y-button-group {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.wpa11y-option-btn {
+    flex: 1;
+    min-width: 60px;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--wpa11y-toolbar-text);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.wpa11y-option-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.wpa11y-option-btn:focus {
+    outline: 2px solid var(--wpa11y-toolbar-accent);
+    outline-offset: 2px;
+}
+
+.wpa11y-option-btn.is-active,
+.wpa11y-option-btn[aria-checked="true"] {
+    background: var(--wpa11y-toolbar-accent);
+    border-color: var(--wpa11y-toolbar-accent);
+}
+
+/* Slider Option */
+.wpa11y-slider-option {
+    margin-bottom: 16px;
+}
+
+.wpa11y-slider-option label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--wpa11y-toolbar-text);
+    margin-bottom: 8px;
+}
+
+.wpa11y-slider-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wpa11y-btn-decrease,
+.wpa11y-btn-increase {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--wpa11y-toolbar-text);
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.wpa11y-btn-decrease:hover,
+.wpa11y-btn-increase:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.wpa11y-btn-decrease:focus,
+.wpa11y-btn-increase:focus {
+    outline: 2px solid var(--wpa11y-toolbar-accent);
+    outline-offset: 2px;
+}
+
+.wpa11y-slider-wrapper input[type="range"] {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    appearance: none;
+    cursor: pointer;
+}
+
+.wpa11y-slider-wrapper input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--wpa11y-toolbar-accent);
+    cursor: pointer;
+}
+
+.wpa11y-slider-wrapper input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: none;
+    border-radius: 50%;
+    background: var(--wpa11y-toolbar-accent);
+    cursor: pointer;
+}
+
+.wpa11y-slider-wrapper input[type="range"]:focus {
+    outline: 2px solid var(--wpa11y-toolbar-accent);
+    outline-offset: 4px;
+}
+
+.wpa11y-output {
+    min-width: 48px;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--wpa11y-toolbar-text);
+}
+
+/* Toggle Option */
+.wpa11y-toggle-option {
+    margin-bottom: 8px;
+}
+
+.wpa11y-switch-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--wpa11y-toolbar-text);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.wpa11y-switch-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.wpa11y-switch-btn:focus {
+    outline: 2px solid var(--wpa11y-toolbar-accent);
+    outline-offset: 2px;
+}
+
+.wpa11y-toggle-label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.wpa11y-toggle-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+}
+
+.wpa11y-toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+}
+
+.wpa11y-switch-btn[aria-checked="true"] .wpa11y-toggle-switch {
+    background: var(--wpa11y-toolbar-accent);
+}
+
+.wpa11y-switch-btn[aria-checked="true"] .wpa11y-toggle-switch::after {
+    transform: translateX(20px);
+}
+
+/* Footer */
+.wpa11y-footer {
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wpa11y-reset {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--wpa11y-toolbar-text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.wpa11y-reset:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.wpa11y-reset:focus {
+    outline: 2px solid var(--wpa11y-toolbar-accent);
+    outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Reading Guide Overlay
+   ========================================================================== */
+
+.wpa11y-reading-guide {
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: rgba(255, 255, 0, 0.3);
+    border-top: 2px solid #ffcc00;
+    border-bottom: 2px solid #ffcc00;
+    pointer-events: none;
+    z-index: 999998;
+    transition: top 0.05s linear;
+}
+
+/* ==========================================================================
+   Reading Mask Overlay
+   ========================================================================== */
+
+.wpa11y-reading-mask {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999997;
+}
+
+.wpa11y-reading-mask::before,
+.wpa11y-reading-mask::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.wpa11y-reading-mask::before {
+    top: 0;
+    height: var(--mask-top, 0);
+}
+
+.wpa11y-reading-mask::after {
+    bottom: 0;
+    height: var(--mask-bottom, 0);
+}
+
+/* ==========================================================================
+   Screen Reader Only
+   ========================================================================== */
+
+.wpa11y-screen-reader-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ==========================================================================
+   Skip Links (Included for completeness)
+   ========================================================================== */
+
+.wpa11y-skip-links {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100000;
+}
+
+.wpa11y-skip-link {
+    position: absolute;
+    top: -100px;
+    left: 10px;
+    padding: 12px 24px;
+    background: #000;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: top 0.2s ease-in-out;
+}
+
+.wpa11y-skip-link:focus {
+    top: 0;
+    outline: 3px solid var(--wpa11y-focus-ring, #0066cc);
+    outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 480px) {
+    .wpa11y-toolbar[data-position="left"],
+    .wpa11y-toolbar[data-position="right"] {
+        left: auto;
+        right: 16px;
+        bottom: 16px;
+        top: auto;
+        transform: none;
+    }
+    
+    .wpa11y-toolbar[data-position="left"] .wpa11y-panel,
+    .wpa11y-toolbar[data-position="right"] .wpa11y-panel {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        bottom: 80px;
+        top: auto;
+        width: auto;
+        max-height: 60vh;
+        transform: none;
+    }
+    
+    .wpa11y-panel {
+        width: auto;
+        max-height: 60vh;
+    }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+    .wpa11y-toolbar,
+    .wpa11y-skip-links,
+    .wpa11y-reading-guide,
+    .wpa11y-reading-mask {
+        display: none !important;
+    }
+}
+

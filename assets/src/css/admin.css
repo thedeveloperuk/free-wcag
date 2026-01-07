@@ -1,0 +1,990 @@
+/**
+ * WP Accessibility Suite - Admin Styles
+ * 
+ * @package WP_Accessibility_Suite
+ * @since 1.0.0
+ */
+
+/* ==========================================================================
+   CSS Variables
+   ========================================================================== */
+
+:root {
+    --wpa11y-primary: #2271b1;
+    --wpa11y-primary-hover: #135e96;
+    --wpa11y-success: #00a32a;
+    --wpa11y-warning: #dba617;
+    --wpa11y-error: #d63638;
+    --wpa11y-notice: #72aee6;
+    
+    --wpa11y-bg: #f0f0f1;
+    --wpa11y-bg-card: #ffffff;
+    --wpa11y-border: #c3c4c7;
+    --wpa11y-text: #1d2327;
+    --wpa11y-text-muted: #646970;
+    
+    --wpa11y-radius: 4px;
+    --wpa11y-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    --wpa11y-shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.08);
+    
+    --wpa11y-transition: 0.2s ease;
+}
+
+/* ==========================================================================
+   Admin Layout
+   ========================================================================== */
+
+.wpa11y-admin {
+    max-width: 1400px;
+    margin: 20px 20px 20px 0;
+}
+
+.wpa11y-admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: var(--wpa11y-bg-card);
+    border: 1px solid var(--wpa11y-border);
+    border-radius: var(--wpa11y-radius);
+    margin-bottom: 20px;
+}
+
+.wpa11y-admin-header h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 23px;
+    font-weight: 400;
+    color: var(--wpa11y-text);
+}
+
+.wpa11y-admin-header h1 .dashicons {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: var(--wpa11y-primary);
+}
+
+.wpa11y-version {
+    margin: 0;
+    color: var(--wpa11y-text-muted);
+    font-size: 12px;
+}
+
+/* ==========================================================================
+   Compliance Badge
+   ========================================================================== */
+
+.wpa11y-compliance-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 20px;
+    border-radius: var(--wpa11y-radius);
+    text-align: center;
+}
+
+.wpa11y-compliance-high {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border: 1px solid var(--wpa11y-success);
+}
+
+.wpa11y-compliance-medium {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%);
+    border: 1px solid var(--wpa11y-warning);
+}
+
+.wpa11y-compliance-low {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    border: 1px solid var(--wpa11y-error);
+}
+
+.wpa11y-score {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.wpa11y-compliance-high .wpa11y-score { color: #155724; }
+.wpa11y-compliance-medium .wpa11y-score { color: #856404; }
+.wpa11y-compliance-low .wpa11y-score { color: #721c24; }
+
+.wpa11y-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+    opacity: 0.8;
+}
+
+/* ==========================================================================
+   Quick Stats
+   ========================================================================== */
+
+.wpa11y-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.wpa11y-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: var(--wpa11y-bg-card);
+    border: 1px solid var(--wpa11y-border);
+    border-radius: var(--wpa11y-radius);
+    box-shadow: var(--wpa11y-shadow);
+}
+
+.wpa11y-stat-card .dashicons {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: var(--wpa11y-primary);
+}
+
+.wpa11y-stat-warning .dashicons {
+    color: var(--wpa11y-warning);
+}
+
+.wpa11y-stat-error .dashicons {
+    color: var(--wpa11y-error);
+}
+
+.wpa11y-stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.wpa11y-stat-value {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--wpa11y-text);
+}
+
+.wpa11y-stat-label {
+    font-size: 12px;
+    color: var(--wpa11y-text-muted);
+}
+
+/* ==========================================================================
+   Navigation Tabs
+   ========================================================================== */
+
+.wpa11y-admin-nav {
+    display: flex;
+    gap: 0;
+    background: var(--wpa11y-bg-card);
+    border: 1px solid var(--wpa11y-border);
+    border-radius: var(--wpa11y-radius);
+    padding: 4px;
+    margin-bottom: 20px;
+}
+
+.wpa11y-admin-nav button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    border-radius: var(--wpa11y-radius);
+    color: var(--wpa11y-text-muted);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all var(--wpa11y-transition);
+}
+
+.wpa11y-admin-nav button:hover {
+    color: var(--wpa11y-text);
+    background: var(--wpa11y-bg);
+}
+
+.wpa11y-admin-nav button.is-active {
+    background: var(--wpa11y-primary);
+    color: #fff;
+}
+
+.wpa11y-admin-nav button .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* ==========================================================================
+   Tab Content
+   ========================================================================== */
+
+.wpa11y-tab-content {
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   Module Cards
+   ========================================================================== */
+
+.wpa11y-modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 20px;
+}
+
+.wpa11y-module-card {
+    background: var(--wpa11y-bg-card);
+    border: 1px solid var(--wpa11y-border);
+    border-radius: var(--wpa11y-radius);
+    box-shadow: var(--wpa11y-shadow);
+    transition: all var(--wpa11y-transition);
+}
+
+.wpa11y-module-card:hover {
+    box-shadow: var(--wpa11y-shadow-hover);
+}
+
+.wpa11y-module-card.is-disabled {
+    opacity: 0.7;
+}
+
+.wpa11y-module-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+    border-bottom: 1px solid var(--wpa11y-border);
+}
+
+.wpa11y-module-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--wpa11y-bg);
+    border-radius: var(--wpa11y-radius);
+    flex-shrink: 0;
+}
+
+.wpa11y-module-icon .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    color: var(--wpa11y-primary);
+}
+
+.wpa11y-module-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.wpa11y-module-info h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--wpa11y-text);
+}
+
+.wpa11y-module-info p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--wpa11y-text-muted);
+}
+
+/* Badges */
+.wpa11y-badge {
+    display: inline-flex;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 10px;
+}
+
+.wpa11y-badge-new {
+    background: #e8f4ff;
+    color: var(--wpa11y-primary);
+}
+
+.wpa11y-badge-advanced {
+    background: #fff3cd;
+    color: #856404;
+}
+
+/* ==========================================================================
+   Toggle Switches
+   ========================================================================== */
+
+.wpa11y-master-switch,
+.wpa11y-feature-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.wpa11y-master-switch input,
+.wpa11y-feature-toggle input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.wpa11y-switch-slider {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background: #c3c4c7;
+    border-radius: 12px;
+    transition: all var(--wpa11y-transition);
+    flex-shrink: 0;
+}
+
+.wpa11y-switch-slider::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: all var(--wpa11y-transition);
+}
+
+input:checked + .wpa11y-switch-slider {
+    background: var(--wpa11y-success);
+}
+
+input:checked + .wpa11y-switch-slider::after {
+    left: 22px;
+}
+
+input:focus + .wpa11y-switch-slider {
+    box-shadow: 0 0 0 2px var(--wpa11y-primary);
+}
+
+input:disabled + .wpa11y-switch-slider {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Small switch variant */
+.wpa11y-switch-small {
+    width: 36px;
+    height: 20px;
+}
+
+.wpa11y-switch-small::after {
+    width: 16px;
+    height: 16px;
+}
+
+input:checked + .wpa11y-switch-small::after {
+    left: 18px;
+}
+
+/* ==========================================================================
+   Module Features
+   ========================================================================== */
+
+.wpa11y-module-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    padding: 20px;
+    transition: opacity var(--wpa11y-transition);
+}
+
+.wpa11y-module-features.is-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.wpa11y-feature-toggle {
+    padding: 8px 12px;
+    background: var(--wpa11y-bg);
+    border-radius: var(--wpa11y-radius);
+}
+
+.wpa11y-feature-toggle:hover {
+    background: #e5e5e6;
+}
+
+.wpa11y-feature-label {
+    font-size: 13px;
+    color: var(--wpa11y-text);
+}
+
+/* ==========================================================================
+   Module Footer
+   ========================================================================== */
+
+.wpa11y-module-footer {
+    padding: 12px 20px;
+    background: var(--wpa11y-bg);
+    border-top: 1px solid var(--wpa11y-border);
+    border-radius: 0 0 var(--wpa11y-radius) var(--wpa11y-radius);
+}
+
+.wpa11y-wcag-badge {
+    display: inline-flex;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-family: monospace;
+    color: var(--wpa11y-text-muted);
+    background: var(--wpa11y-bg-card);
+    border: 1px solid var(--wpa11y-border);
+    border-radius: var(--wpa11y-radius);
+}
+
+/* ==========================================================================
+   Settings Cards
+   ========================================================================== */
+
+.wpa11y-settings-card {
+    background: var(--wpa11y-bg-card);
+    border: 1px solid var(--wpa11y-border);
+    border-radius: var(--wpa11y-radius);
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.wpa11y-settings-card h2 {
+    margin: 0 0 20px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--wpa11y-text);
+}
+
+.wpa11y-settings-card h3 {
+    margin: 24px 0 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--wpa11y-text);
+}
+
+.wpa11y-setting-row {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--wpa11y-border);
+}
+
+.wpa11y-setting-row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.wpa11y-setting-row.is-disabled {
+    opacity: 0.5;
+}
+
+.wpa11y-setting-row label:not(.wpa11y-feature-toggle) {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--wpa11y-text);
+}
+
+.wpa11y-setting-row select,
+.wpa11y-setting-row input[type="number"],
+.wpa11y-setting-row input[type="text"] {
+    min-width: 200px;
+}
+
+.wpa11y-setting-row .description {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--wpa11y-text-muted);
+}
+
+/* Danger Zone */
+.wpa11y-danger-zone {
+    border-color: var(--wpa11y-error);
+}
+
+.wpa11y-danger-zone h2 {
+    color: var(--wpa11y-error);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.wpa11y-admin-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: var(--wpa11y-bg-card);
+    border: 1px solid var(--wpa11y-border);
+    border-radius: var(--wpa11y-radius);
+    margin-top: 20px;
+}
+
+.wpa11y-footer-left p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--wpa11y-text-muted);
+}
+
+.wpa11y-save-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--wpa11y-text-muted);
+}
+
+.wpa11y-saved {
+    color: var(--wpa11y-success);
+}
+
+.wpa11y-saved .dashicons {
+    color: var(--wpa11y-success);
+}
+
+/* ==========================================================================
+   Scanner Page
+   ========================================================================== */
+
+.wpa11y-scanner-controls {
+    background: var(--wpa11y-bg-card);
+    border: 1px solid var(--wpa11y-border);
+    border-radius: var(--wpa11y-radius);
+    padding: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.wpa11y-scan-types {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.wpa11y-scan-types .button-hero {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wpa11y-last-scan {
+    margin: 0;
+    font-size: 13px;
+    color: var(--wpa11y-text-muted);
+}
+
+/* Progress Bar */
+.wpa11y-scan-progress {
+    background: var(--wpa11y-bg-card);
+    border: 1px solid var(--wpa11y-border);
+    border-radius: var(--wpa11y-radius);
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.wpa11y-progress-bar {
+    height: 24px;
+    background: var(--wpa11y-bg);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.wpa11y-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--wpa11y-primary), var(--wpa11y-success));
+    border-radius: 12px;
+    transition: width 0.3s ease;
+}
+
+.wpa11y-progress-text {
+    margin: 12px 0 0;
+    text-align: center;
+    font-size: 14px;
+    color: var(--wpa11y-text-muted);
+}
+
+/* Summary Cards */
+.wpa11y-scan-summary {
+    margin-bottom: 20px;
+}
+
+.wpa11y-summary-cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.wpa11y-summary-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 32px;
+    background: var(--wpa11y-bg-card);
+    border: 1px solid var(--wpa11y-border);
+    border-radius: var(--wpa11y-radius);
+}
+
+.wpa11y-summary-count {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.wpa11y-summary-error .wpa11y-summary-count { color: var(--wpa11y-error); }
+.wpa11y-summary-warning .wpa11y-summary-count { color: var(--wpa11y-warning); }
+.wpa11y-summary-notice .wpa11y-summary-count { color: var(--wpa11y-notice); }
+
+.wpa11y-summary-label {
+    margin-top: 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--wpa11y-text-muted);
+}
+
+/* Filter Controls */
+.wpa11y-filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+/* Results Table */
+.wpa11y-results-table {
+    background: var(--wpa11y-bg-card);
+}
+
+.wpa11y-severity-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: var(--wpa11y-radius);
+}
+
+.wpa11y-severity-error .wpa11y-severity-badge {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.wpa11y-severity-warning .wpa11y-severity-badge {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.wpa11y-severity-notice .wpa11y-severity-badge {
+    background: #e8f4ff;
+    color: var(--wpa11y-primary);
+}
+
+.wpa11y-element-preview {
+    display: block;
+    margin-top: 8px;
+    padding: 8px;
+    background: var(--wpa11y-bg);
+    border-radius: var(--wpa11y-radius);
+    font-size: 11px;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* No Results */
+.wpa11y-no-results {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--wpa11y-bg-card);
+    border: 1px solid var(--wpa11y-border);
+    border-radius: var(--wpa11y-radius);
+}
+
+.wpa11y-no-results .dashicons {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: var(--wpa11y-success);
+}
+
+.wpa11y-no-results p {
+    margin: 16px 0 0;
+    font-size: 16px;
+    color: var(--wpa11y-text-muted);
+}
+
+/* ==========================================================================
+   Reports Page
+   ========================================================================== */
+
+.wpa11y-report-section {
+    background: var(--wpa11y-bg-card);
+    border: 1px solid var(--wpa11y-border);
+    border-radius: var(--wpa11y-radius);
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.wpa11y-report-section h2 {
+    margin: 0 0 20px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Compliance Meter */
+.wpa11y-compliance-overview {
+    display: flex;
+    justify-content: center;
+}
+
+.wpa11y-compliance-meter {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.wpa11y-meter-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid;
+}
+
+.wpa11y-meter-circle.wpa11y-compliance-high {
+    border-color: var(--wpa11y-success);
+}
+
+.wpa11y-meter-circle.wpa11y-compliance-medium {
+    border-color: var(--wpa11y-warning);
+}
+
+.wpa11y-meter-circle.wpa11y-compliance-low {
+    border-color: var(--wpa11y-error);
+}
+
+.wpa11y-meter-value {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.wpa11y-meter-label strong {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.wpa11y-meter-label p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--wpa11y-text-muted);
+    max-width: 300px;
+}
+
+/* Status Table */
+.wpa11y-status-table {
+    margin-top: 16px;
+}
+
+.wpa11y-status-enabled {
+    color: var(--wpa11y-success);
+    font-weight: 500;
+}
+
+.wpa11y-status-disabled {
+    color: var(--wpa11y-text-muted);
+}
+
+/* Issue Breakdown */
+.wpa11y-issue-breakdown {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 20px;
+}
+
+.wpa11y-issue-stat {
+    text-align: center;
+}
+
+.wpa11y-issue-count {
+    display: block;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.wpa11y-issue-count.wpa11y-error { color: var(--wpa11y-error); }
+.wpa11y-issue-count.wpa11y-warning { color: var(--wpa11y-warning); }
+.wpa11y-issue-count.wpa11y-notice { color: var(--wpa11y-notice); }
+
+.wpa11y-issue-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--wpa11y-text-muted);
+}
+
+/* Export Options */
+.wpa11y-export-options {
+    display: flex;
+    gap: 12px;
+}
+
+.wpa11y-export-options .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ==========================================================================
+   Help Page
+   ========================================================================== */
+
+.wpa11y-help-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.wpa11y-help-card {
+    background: var(--wpa11y-bg-card);
+    border: 1px solid var(--wpa11y-border);
+    border-radius: var(--wpa11y-radius);
+    padding: 24px;
+}
+
+.wpa11y-help-card.wpa11y-help-wide {
+    grid-column: 1 / -1;
+}
+
+.wpa11y-help-card h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 16px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.wpa11y-help-card h2 .dashicons {
+    color: var(--wpa11y-primary);
+}
+
+.wpa11y-help-card ol,
+.wpa11y-help-card ul {
+    margin: 0;
+    padding-left: 24px;
+}
+
+.wpa11y-help-card li {
+    margin-bottom: 8px;
+}
+
+.wpa11y-help-card a {
+    color: var(--wpa11y-primary);
+    text-decoration: none;
+}
+
+.wpa11y-help-card a:hover {
+    text-decoration: underline;
+}
+
+/* Module Guide */
+.wpa11y-module-guide {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.wpa11y-guide-item h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.wpa11y-guide-item p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--wpa11y-text-muted);
+}
+
+/* Checklist */
+.wpa11y-checklist {
+    list-style: none;
+    padding: 0;
+}
+
+.wpa11y-checklist li {
+    padding: 12px;
+    background: var(--wpa11y-bg);
+    border-radius: var(--wpa11y-radius);
+    margin-bottom: 12px;
+}
+
+.wpa11y-checklist li:last-child {
+    margin-bottom: 0;
+}
+
+.wpa11y-checklist strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.wpa11y-checklist p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--wpa11y-text-muted);
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 782px) {
+    .wpa11y-admin-header {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+    
+    .wpa11y-admin-nav {
+        flex-wrap: wrap;
+    }
+    
+    .wpa11y-modules-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .wpa11y-summary-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .wpa11y-compliance-meter {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
