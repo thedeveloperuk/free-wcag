@@ -1,19 +1,21 @@
 /**
- * WP Accessibility Suite - Admin Dashboard
+ * Free WCAG Accessibility Suite - Admin Dashboard
+ * 
+ * Uses global functions for Alpine.js components for maximum compatibility.
  * 
  * @package WP_Accessibility_Suite
  * @since 1.0.0
  */
 
-document.addEventListener('alpine:init', () => {
-    
-    /**
-     * Main admin dashboard controller
-     */
-    Alpine.data('wpa11yAdmin', () => ({
+/**
+ * Main admin dashboard controller
+ * Called via x-data="wpa11yAdmin()"
+ */
+window.wpa11yAdmin = function() {
+    return {
         activeTab: 'modules',
-        settings: {},
-        originalSettings: {},
+        settings: JSON.parse(JSON.stringify(window.wpa11ySettings || {})),
+        originalSettings: JSON.parse(JSON.stringify(window.wpa11ySettings || {})),
         saving: false,
         saved: false,
         saveTimeout: null,
@@ -22,10 +24,6 @@ document.addEventListener('alpine:init', () => {
          * Initialize the admin panel
          */
         init() {
-            // Load settings from localized data
-            this.settings = JSON.parse(JSON.stringify(window.wpa11ySettings || {}));
-            this.originalSettings = JSON.parse(JSON.stringify(window.wpa11ySettings || {}));
-            
             // Watch for changes to auto-save
             this.$watch('settings', () => {
                 if (this.hasChanges) {
@@ -86,7 +84,7 @@ document.addEventListener('alpine:init', () => {
                 }
             } catch (error) {
                 console.error('Failed to save settings:', error);
-                this.showNotice(window.wpa11yAdmin?.strings?.saveFailed || 'Failed to save settings.', 'error');
+                this.showNotice(window.wpa11yAdminData?.strings?.saveFailed || 'Failed to save settings.', 'error');
             } finally {
                 this.saving = false;
             }
@@ -96,7 +94,7 @@ document.addEventListener('alpine:init', () => {
          * Reset settings to defaults
          */
         async resetSettings() {
-            const confirmMessage = window.wpa11yAdmin?.strings?.resetConfirm || 
+            const confirmMessage = window.wpa11yAdminData?.strings?.resetConfirm || 
                 'Reset all settings to defaults? This cannot be undone.';
             
             if (!confirm(confirmMessage)) {
@@ -115,7 +113,7 @@ document.addEventListener('alpine:init', () => {
                     const data = await response.json();
                     this.settings = JSON.parse(JSON.stringify(data));
                     this.originalSettings = JSON.parse(JSON.stringify(data));
-                    this.showNotice(window.wpa11yAdmin?.strings?.reset || 'Settings reset to defaults.', 'success');
+                    this.showNotice(window.wpa11yAdminData?.strings?.reset || 'Settings reset to defaults.', 'success');
                 }
             } catch (error) {
                 console.error('Failed to reset settings:', error);
@@ -157,12 +155,15 @@ document.addEventListener('alpine:init', () => {
                 notice.remove();
             });
         }
-    }));
-    
-    /**
-     * Scanner controller
-     */
-    Alpine.data('wpa11yScanner', () => ({
+    };
+};
+
+/**
+ * Scanner controller
+ * Called via x-data="wpa11yScanner()"
+ */
+window.wpa11yScanner = function() {
+    return {
         scanning: false,
         progress: 0,
         progressText: '',
@@ -209,7 +210,7 @@ document.addEventListener('alpine:init', () => {
         async startScan(type = 'full') {
             this.scanning = true;
             this.progress = 0;
-            this.progressText = window.wpa11yAdmin?.strings?.scanStarted || 'Starting scan...';
+            this.progressText = window.wpa11yAdminData?.strings?.scanStarted || 'Starting scan...';
             this.results = [];
             
             try {
@@ -242,11 +243,11 @@ document.addEventListener('alpine:init', () => {
                 // Load final results
                 await this.loadResults();
                 
-                this.progressText = window.wpa11yAdmin?.strings?.scanComplete || 'Scan complete!';
+                this.progressText = window.wpa11yAdminData?.strings?.scanComplete || 'Scan complete!';
                 
             } catch (error) {
                 console.error('Scan failed:', error);
-                this.progressText = window.wpa11yAdmin?.strings?.scanFailed || 'Scan failed. Please try again.';
+                this.progressText = window.wpa11yAdminData?.strings?.scanFailed || 'Scan failed. Please try again.';
             } finally {
                 setTimeout(() => {
                     this.scanning = false;
@@ -260,11 +261,11 @@ document.addEventListener('alpine:init', () => {
         async processBatch(type, batch) {
             const formData = new FormData();
             formData.append('action', 'wpa11y_scan');
-            formData.append('nonce', window.wpa11yAdmin.nonce);
+            formData.append('nonce', window.wpa11yAdminData.nonce);
             formData.append('scan_type', type);
             formData.append('batch', batch);
             
-            const response = await fetch(window.wpa11yAdmin.ajaxUrl, {
+            const response = await fetch(window.wpa11yAdminData.ajaxUrl, {
                 method: 'POST',
                 body: formData,
             });
@@ -315,13 +316,5 @@ document.addEventListener('alpine:init', () => {
                 console.error('Failed to resolve issue:', error);
             }
         }
-    }));
-});
-
-/**
- * Initialize when DOM is ready (fallback for non-Alpine pages)
- */
-document.addEventListener('DOMContentLoaded', () => {
-    // Add any non-Alpine initialization here
-});
-
+    };
+};

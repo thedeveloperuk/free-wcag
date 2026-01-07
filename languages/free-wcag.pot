@@ -2,7 +2,7 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Accessibility Suite 1.0.0\n"
+"Project-Id-Version: Free WCAG 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/free-wcag\n"
 "POT-Creation-Date: 2024-01-01T00:00:00+00:00\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Domain: free-wcag\n"
 
 #. Plugin Name of the plugin
-msgid "WP Accessibility Suite"
+msgid "Free WCAG"
 msgstr ""
 
 #. Description of the plugin

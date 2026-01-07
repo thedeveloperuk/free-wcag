@@ -125,15 +125,6 @@ class WPA11Y_Admin {
             return;
         }
 
-        // Alpine.js (bundled locally for WordPress.org compliance)
-        wp_enqueue_script(
-            'wpa11y-alpinejs',
-            WPA11Y_PLUGIN_URL . 'assets/vendor/alpine.min.js',
-            [],
-            '3.14.3',
-            [ 'strategy' => 'defer' ]
-        );
-
         // Admin styles
         $css_file = file_exists( WPA11Y_PLUGIN_DIR . 'assets/build/css/admin.min.css' )
             ? 'assets/build/css/admin.min.css'
@@ -146,7 +137,7 @@ class WPA11Y_Admin {
             WPA11Y_VERSION
         );
 
-        // Admin scripts
+        // Admin scripts - load BEFORE Alpine so global functions are defined
         $js_file = file_exists( WPA11Y_PLUGIN_DIR . 'assets/build/js/admin.min.js' )
             ? 'assets/build/js/admin.min.js'
             : 'assets/src/js/admin/app.js';
@@ -154,9 +145,18 @@ class WPA11Y_Admin {
         wp_enqueue_script(
             'wpa11y-admin',
             WPA11Y_PLUGIN_URL . $js_file,
-            [ 'wpa11y-alpinejs' ],
+            [],
             WPA11Y_VERSION,
-            true
+            [ 'in_footer' => true ]
+        );
+
+        // Alpine.js - load AFTER our script defines the global functions
+        wp_enqueue_script(
+            'wpa11y-alpinejs',
+            WPA11Y_PLUGIN_URL . 'assets/vendor/alpine.min.js',
+            [ 'wpa11y-admin' ],
+            '3.14.3',
+            [ 'strategy' => 'defer', 'in_footer' => true ]
         );
 
         // Localize script data
@@ -165,7 +165,7 @@ class WPA11Y_Admin {
             'root'  => esc_url_raw( rest_url() ),
             'nonce' => wp_create_nonce( 'wp_rest' ),
         ] );
-        wp_localize_script( 'wpa11y-admin', 'wpa11yAdmin', [
+        wp_localize_script( 'wpa11y-admin', 'wpa11yAdminData', [
             'ajaxUrl' => admin_url( 'admin-ajax.php' ),
             'nonce'   => wp_create_nonce( 'wpa11y_admin_nonce' ),
             'strings' => [

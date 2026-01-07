@@ -26,7 +26,7 @@ $quick_stats  = WPA11Y_Dashboard::get_quick_stats();
         <div class="wpa11y-header-content">
             <h1>
                 <span class="dashicons dashicons-universal-access-alt"></span>
-                <?php esc_html_e( 'WP Accessibility Suite', 'free-wcag' ); ?>
+                <?php esc_html_e( 'Free WCAG Accessibility Suite', 'free-wcag' ); ?>
             </h1>
             <p class="wpa11y-version">v<?php echo esc_html( WPA11Y_VERSION ); ?></p>
         </div>

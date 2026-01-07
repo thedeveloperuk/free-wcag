@@ -100,7 +100,7 @@ This plugin addresses criteria from all four WCAG principles:
 = Automatic Installation =
 
 1. Go to **Plugins > Add New** in your WordPress admin
-2. Search for "WP Accessibility Suite"
+2. Search for "Free WCAG"
 3. Click **Install Now** and then **Activate**
 
 = Manual Installation =
@@ -184,7 +184,7 @@ Yes. The plugin is fully internationalized and ready for translation.
 == Upgrade Notice ==
 
 = 1.0.0 =
-Initial release of WP Accessibility Suite.
+Initial release of Free WCAG.
 
 == Additional Information ==
 

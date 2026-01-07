@@ -1,5 +1,5 @@
 /**
- * WP Accessibility Suite - Frontend Toolbar
+ * Free WCAG Accessibility Suite - Frontend Toolbar
  * 
  * @package WP_Accessibility_Suite
  * @since 1.0.0

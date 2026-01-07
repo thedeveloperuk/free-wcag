@@ -79,43 +79,30 @@ class WPA11Y_Frontend {
      * @return void
      */
     private function enqueue_toolbar_assets(): void {
-        // Toolbar CSS
+        // Toolbar CSS - check for minified first
+        $css_file = file_exists( WPA11Y_PLUGIN_DIR . 'assets/build/css/toolbar.min.css' )
+            ? 'assets/build/css/toolbar.min.css'
+            : 'assets/src/css/toolbar.css';
+
         wp_enqueue_style(
             'wpa11y-toolbar',
-            WPA11Y_PLUGIN_URL . 'assets/build/css/toolbar.min.css',
+            WPA11Y_PLUGIN_URL . $css_file,
             [],
             WPA11Y_VERSION
         );
 
-        // Fallback
-        if ( ! file_exists( WPA11Y_PLUGIN_DIR . 'assets/build/css/toolbar.min.css' ) ) {
-            wp_enqueue_style(
-                'wpa11y-toolbar',
-                WPA11Y_PLUGIN_URL . 'assets/src/css/toolbar.css',
-                [],
-                WPA11Y_VERSION
-            );
-        }
+        // Toolbar JS - check for minified first
+        $js_file = file_exists( WPA11Y_PLUGIN_DIR . 'assets/build/js/toolbar.min.js' )
+            ? 'assets/build/js/toolbar.min.js'
+            : 'assets/src/js/frontend/toolbar.js';
 
-        // Toolbar JS
         wp_enqueue_script(
             'wpa11y-toolbar',
-            WPA11Y_PLUGIN_URL . 'assets/build/js/toolbar.min.js',
+            WPA11Y_PLUGIN_URL . $js_file,
             [],
             WPA11Y_VERSION,
             true
         );
-
-        // Fallback
-        if ( ! file_exists( WPA11Y_PLUGIN_DIR . 'assets/build/js/toolbar.min.js' ) ) {
-            wp_enqueue_script(
-                'wpa11y-toolbar',
-                WPA11Y_PLUGIN_URL . 'assets/src/js/frontend/toolbar.js',
-                [],
-                WPA11Y_VERSION,
-                true
-            );
-        }
 
         // Pass configuration to JS
         wp_localize_script( 'wpa11y-toolbar', 'wpa11yConfig', [
@@ -160,44 +147,31 @@ class WPA11Y_Frontend {
      * @return void
      */
     private function enqueue_remediation_assets(): void {
-        // Remediation CSS
+        // Remediation CSS - check for minified first
+        $css_file = file_exists( WPA11Y_PLUGIN_DIR . 'assets/build/css/remediation.min.css' )
+            ? 'assets/build/css/remediation.min.css'
+            : 'assets/src/css/remediation.css';
+
         wp_enqueue_style(
             'wpa11y-remediation',
-            WPA11Y_PLUGIN_URL . 'assets/build/css/remediation.min.css',
+            WPA11Y_PLUGIN_URL . $css_file,
             [],
             WPA11Y_VERSION
         );
 
-        // Fallback
-        if ( ! file_exists( WPA11Y_PLUGIN_DIR . 'assets/build/css/remediation.min.css' ) ) {
-            wp_enqueue_style(
-                'wpa11y-remediation',
-                WPA11Y_PLUGIN_URL . 'assets/src/css/remediation.css',
-                [],
-                WPA11Y_VERSION
-            );
-        }
-
         // Remediation JS (if needed)
         if ( $this->needs_remediation_js() ) {
+            $js_file = file_exists( WPA11Y_PLUGIN_DIR . 'assets/build/js/remediation.min.js' )
+                ? 'assets/build/js/remediation.min.js'
+                : 'assets/src/js/frontend/remediation.js';
+
             wp_enqueue_script(
                 'wpa11y-remediation',
-                WPA11Y_PLUGIN_URL . 'assets/build/js/remediation.min.js',
+                WPA11Y_PLUGIN_URL . $js_file,
                 [],
                 WPA11Y_VERSION,
                 true
             );
-
-            // Fallback
-            if ( ! file_exists( WPA11Y_PLUGIN_DIR . 'assets/build/js/remediation.min.js' ) ) {
-                wp_enqueue_script(
-                    'wpa11y-remediation',
-                    WPA11Y_PLUGIN_URL . 'assets/src/js/remediation/index.js',
-                    [],
-                    WPA11Y_VERSION,
-                    true
-                );
-            }
         }
     }
 
