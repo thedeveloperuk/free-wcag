@@ -11,11 +11,13 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$scan_summary   = WPA11Y_Dashboard::get_scan_summary();
-$settings       = WPA11Y_Settings::get_settings();
-$post_types     = WPA11Y_Settings::get_scannable_post_types();
-$excluded_types = $settings['scanner']['excluded_types'] ?? [];
-$max_pages      = $settings['scanner']['max_pages'] ?? 0;
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template variables
+$wpa11y_scan_summary   = WPA11Y_Dashboard::get_scan_summary();
+$wpa11y_settings       = WPA11Y_Settings::get_settings();
+$wpa11y_post_types     = WPA11Y_Settings::get_scannable_post_types();
+$wpa11y_excluded_types = $wpa11y_settings['scanner']['excluded_types'] ?? [];
+$wpa11y_max_pages      = $wpa11y_settings['scanner']['max_pages'] ?? 0;
+// phpcs:enable
 ?>
 
 <div class="wpa11y-admin wrap" x-data="wpa11yScanner()">
@@ -34,14 +36,14 @@ $max_pages      = $settings['scanner']['max_pages'] ?? 0;
                 <h3><?php esc_html_e( 'Content to Scan', 'free-wcag' ); ?></h3>
                 <p class="description"><?php esc_html_e( 'Select which post types to include in the scan.', 'free-wcag' ); ?></p>
                 <div class="wpa11y-post-types-grid">
-                    <?php foreach ( $post_types as $pt ) : ?>
+                    <?php foreach ( $wpa11y_post_types as $wpa11y_pt ) : ?>
                     <label class="wpa11y-post-type-checkbox">
                         <input type="checkbox" 
-                               :checked="!scannerSettings.excludedTypes.includes('<?php echo esc_attr( $pt['name'] ); ?>')"
-                               @change="togglePostType('<?php echo esc_attr( $pt['name'] ); ?>')">
+                               :checked="!scannerSettings.excludedTypes.includes('<?php echo esc_attr( $wpa11y_pt['name'] ); ?>')"
+                               @change="togglePostType('<?php echo esc_attr( $wpa11y_pt['name'] ); ?>')">
                         <span class="wpa11y-post-type-label">
-                            <?php echo esc_html( $pt['label'] ); ?>
-                            <span class="wpa11y-post-type-count">(<?php echo esc_html( $pt['count'] ); ?>)</span>
+                            <?php echo esc_html( $wpa11y_pt['label'] ); ?>
+                            <span class="wpa11y-post-type-count">(<?php echo esc_html( $wpa11y_pt['count'] ); ?>)</span>
                         </span>
                     </label>
                     <?php endforeach; ?>
@@ -99,13 +101,13 @@ $max_pages      = $settings['scanner']['max_pages'] ?? 0;
             </button>
         </div>
         
-        <?php if ( $scan_summary['last_scan'] ) : ?>
+        <?php if ( $wpa11y_scan_summary['last_scan'] ) : ?>
         <p class="wpa11y-last-scan">
             <?php 
-            /* translators: %s: Time since last scan */
             printf( 
+                /* translators: %s: Time since last scan (e.g. "5 minutes") */
                 esc_html__( 'Last scan: %s ago', 'free-wcag' ),
-                human_time_diff( strtotime( $scan_summary['last_scan'] ) )
+                esc_html( human_time_diff( strtotime( $wpa11y_scan_summary['last_scan'] ) ) )
             ); 
             ?>
         </p>

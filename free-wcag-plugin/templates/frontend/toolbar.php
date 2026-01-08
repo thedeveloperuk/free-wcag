@@ -24,7 +24,11 @@ if ( ! defined( 'ABSPATH' ) ) {
             aria-expanded="false"
             aria-controls="wpa11y-panel"
             aria-label="<?php esc_attr_e( 'Open Accessibility Options', 'free-wcag' ); ?>">
-        <?php echo WPA11Y_Toolbar::get_icon(); ?>
+        <?php
+        // Icon is safe SVG hardcoded in the class, not user input.
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo WPA11Y_Toolbar::get_icon();
+        ?>
     </button>
   
     <!-- Main Panel -->

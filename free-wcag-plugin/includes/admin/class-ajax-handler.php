@@ -32,7 +32,7 @@ class WPA11Y_Ajax_Handler {
             ], 403 );
         }
 
-        $scan_type = sanitize_text_field( $_POST['scan_type'] ?? 'full' );
+        $scan_type = isset( $_POST['scan_type'] ) ? sanitize_text_field( wp_unslash( $_POST['scan_type'] ) ) : 'full';
         $batch     = absint( $_POST['batch'] ?? 0 );
 
         // Get settings for batch size
@@ -188,7 +188,7 @@ class WPA11Y_Ajax_Handler {
 
         foreach ( $matches[1] as $index => $match ) {
             $level = (int) $match[0];
-            $text  = strip_tags( $matches[2][ $index ][0] );
+            $text  = wp_strip_all_tags( $matches[2][ $index ][0] );
 
             // Check for skipped levels (e.g., h2 to h4)
             if ( $previous_level > 0 && $level > $previous_level + 1 ) {
@@ -260,7 +260,7 @@ class WPA11Y_Ajax_Handler {
 
         foreach ( $matches as $match ) {
             $full_tag   = $match[0];
-            $link_text  = strip_tags( $match[1] );
+            $link_text  = wp_strip_all_tags( $match[1] );
             $clean_text = strtolower( trim( $link_text ) );
 
             // Check for generic link text
@@ -316,6 +316,7 @@ class WPA11Y_Ajax_Handler {
         $table = $wpdb->prefix . 'a11y_scan_results';
 
         foreach ( $issues as $issue ) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Custom table, no caching needed for inserts.
             $wpdb->insert(
                 $table,
                 [
@@ -344,15 +345,17 @@ class WPA11Y_Ajax_Handler {
         $results_table = $wpdb->prefix . 'a11y_scan_results';
         $history_table = $wpdb->prefix . 'a11y_scan_history';
 
-        // Get summary
+        // Get summary - table name is safe (using wpdb prefix).
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table, fresh data needed.
         $summary = $wpdb->get_row(
             $wpdb->prepare(
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is safely constructed from wpdb prefix.
                 "SELECT 
                     COUNT(*) as total,
                     SUM(CASE WHEN severity = 'error' THEN 1 ELSE 0 END) as errors,
                     SUM(CASE WHEN severity = 'warning' THEN 1 ELSE 0 END) as warnings,
                     SUM(CASE WHEN severity = 'notice' THEN 1 ELSE 0 END) as notices
-                FROM $results_table 
+                FROM {$results_table} 
                 WHERE DATE(scanned_at) = %s",
                 current_time( 'Y-m-d' )
             ),
@@ -363,6 +366,7 @@ class WPA11Y_Ajax_Handler {
         $posts_scanned = wp_count_posts( 'post' )->publish + wp_count_posts( 'page' )->publish;
 
         // Insert history record
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Custom table, no caching needed for inserts.
         $wpdb->insert(
             $history_table,
             [
@@ -392,7 +396,7 @@ class WPA11Y_Ajax_Handler {
             ], 403 );
         }
 
-        $settings = json_decode( stripslashes( $_POST['settings'] ?? '' ), true );
+        $settings = isset( $_POST['settings'] ) ? json_decode( sanitize_text_field( wp_unslash( $_POST['settings'] ) ), true ) : null;
 
         if ( ! is_array( $settings ) ) {
             wp_send_json_error( [

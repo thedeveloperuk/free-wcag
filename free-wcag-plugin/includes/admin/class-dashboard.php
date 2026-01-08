@@ -148,8 +148,9 @@ class WPA11Y_Dashboard {
         $table = $wpdb->prefix . 'a11y_scan_history';
 
         // Check if table exists
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Checking table existence.
         $table_exists = $wpdb->get_var( $wpdb->prepare(
-            "SHOW TABLES LIKE %s",
+            'SHOW TABLES LIKE %s',
             $table
         ) );
 
@@ -164,8 +165,10 @@ class WPA11Y_Dashboard {
             ];
         }
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table, fresh data needed for dashboard.
         $latest = $wpdb->get_row(
-            "SELECT * FROM $table ORDER BY scanned_at DESC LIMIT 1",
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is safely constructed from wpdb prefix.
+            "SELECT * FROM {$table} ORDER BY scanned_at DESC LIMIT 1",
             ARRAY_A
         );
 
@@ -205,6 +208,7 @@ class WPA11Y_Dashboard {
         $total_content = ( $post_count->publish ?? 0 ) + ( $page_count->publish ?? 0 );
 
         // Count images without alt
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Stats query for dashboard, fresh data needed.
         $images_without_alt = $wpdb->get_var(
             "SELECT COUNT(*) FROM {$wpdb->posts} p
             LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = '_wp_attachment_image_alt'

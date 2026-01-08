@@ -11,10 +11,12 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$settings     = WPA11Y_Settings::get_settings();
-$score        = WPA11Y_Dashboard::get_compliance_score( $settings );
-$level        = WPA11Y_Dashboard::get_compliance_level( $score );
-$scan_summary = WPA11Y_Dashboard::get_scan_summary();
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template variables
+$wpa11y_settings     = WPA11Y_Settings::get_settings();
+$wpa11y_score        = WPA11Y_Dashboard::get_compliance_score( $wpa11y_settings );
+$wpa11y_level        = WPA11Y_Dashboard::get_compliance_level( $wpa11y_score );
+$wpa11y_scan_summary = WPA11Y_Dashboard::get_scan_summary();
+// phpcs:enable
 ?>
 
 <div class="wpa11y-admin wrap">
@@ -32,16 +34,16 @@ $scan_summary = WPA11Y_Dashboard::get_scan_summary();
         
         <div class="wpa11y-compliance-overview">
             <div class="wpa11y-compliance-meter">
-                <div class="wpa11y-meter-circle wpa11y-compliance-<?php echo esc_attr( $level ); ?>">
-                    <span class="wpa11y-meter-value"><?php echo esc_html( $score ); ?>%</span>
+                <div class="wpa11y-meter-circle wpa11y-compliance-<?php echo esc_attr( $wpa11y_level ); ?>">
+                    <span class="wpa11y-meter-value"><?php echo esc_html( $wpa11y_score ); ?>%</span>
                 </div>
                 <div class="wpa11y-meter-label">
                     <strong><?php esc_html_e( 'WCAG 2.2 Level AA', 'free-wcag' ); ?></strong>
                     <p>
                         <?php
-                        if ( $level === 'high' ) {
+                        if ( $wpa11y_level === 'high' ) {
                             esc_html_e( 'Excellent! Your site has comprehensive accessibility coverage.', 'free-wcag' );
-                        } elseif ( $level === 'medium' ) {
+                        } elseif ( $wpa11y_level === 'medium' ) {
                             esc_html_e( 'Good progress. Enable more features to improve compliance.', 'free-wcag' );
                         } else {
                             esc_html_e( 'Consider enabling more accessibility modules.', 'free-wcag' );
@@ -68,21 +70,23 @@ $scan_summary = WPA11Y_Dashboard::get_scan_summary();
             </thead>
             <tbody>
                 <?php
-                $modules = WPA11Y_Dashboard::get_modules_display();
-                foreach ( $modules as $module_id => $module ) :
-                    $module_settings = $settings[ $module_id ] ?? [];
-                    $is_enabled      = ! empty( $module_settings['enabled'] );
-                    $features        = $module_settings['features'] ?? [];
-                    $enabled_count   = count( array_filter( $features ) );
-                    $total_count     = count( $features );
+                // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template variables in loop
+                $wpa11y_modules = WPA11Y_Dashboard::get_modules_display();
+                foreach ( $wpa11y_modules as $wpa11y_module_id => $wpa11y_module ) :
+                    $wpa11y_module_settings = $wpa11y_settings[ $wpa11y_module_id ] ?? [];
+                    $wpa11y_is_enabled      = ! empty( $wpa11y_module_settings['enabled'] );
+                    $wpa11y_features        = $wpa11y_module_settings['features'] ?? [];
+                    $wpa11y_enabled_count   = count( array_filter( $wpa11y_features ) );
+                    $wpa11y_total_count     = count( $wpa11y_features );
+                // phpcs:enable
                 ?>
                 <tr>
                     <td>
-                        <span class="dashicons dashicons-<?php echo esc_attr( $module['icon'] ); ?>"></span>
-                        <?php echo esc_html( $module['title'] ); ?>
+                        <span class="dashicons dashicons-<?php echo esc_attr( $wpa11y_module['icon'] ); ?>"></span>
+                        <?php echo esc_html( $wpa11y_module['title'] ); ?>
                     </td>
                     <td>
-                        <?php if ( $is_enabled ) : ?>
+                        <?php if ( $wpa11y_is_enabled ) : ?>
                         <span class="wpa11y-status-enabled"><?php esc_html_e( 'Enabled', 'free-wcag' ); ?></span>
                         <?php else : ?>
                         <span class="wpa11y-status-disabled"><?php esc_html_e( 'Disabled', 'free-wcag' ); ?></span>
@@ -90,12 +94,16 @@ $scan_summary = WPA11Y_Dashboard::get_scan_summary();
                     </td>
                     <td>
                         <?php 
-                        /* translators: 1: Enabled features count, 2: Total features count */
-                        printf( esc_html__( '%1$d of %2$d', 'free-wcag' ), $enabled_count, $total_count ); 
+                        printf( 
+                            /* translators: 1: Enabled features count, 2: Total features count */
+                            esc_html__( '%1$d of %2$d', 'free-wcag' ), 
+                            (int) $wpa11y_enabled_count, 
+                            (int) $wpa11y_total_count 
+                        ); 
                         ?>
                     </td>
                     <td>
-                        <span class="wpa11y-wcag-badge"><?php echo esc_html( $module['wcag'] ); ?></span>
+                        <span class="wpa11y-wcag-badge"><?php echo esc_html( $wpa11y_module['wcag'] ); ?></span>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -107,29 +115,29 @@ $scan_summary = WPA11Y_Dashboard::get_scan_summary();
     <div class="wpa11y-report-section">
         <h2><?php esc_html_e( 'Recent Scan Results', 'free-wcag' ); ?></h2>
         
-        <?php if ( $scan_summary['last_scan'] ) : ?>
+        <?php if ( $wpa11y_scan_summary['last_scan'] ) : ?>
         <div class="wpa11y-scan-results-summary">
             <p>
                 <?php 
-                /* translators: %s: Date of last scan */
                 printf( 
+                    /* translators: %s: Date and time of last scan (e.g. "January 1, 2024 3:00pm") */
                     esc_html__( 'Last scanned: %s', 'free-wcag' ),
-                    esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $scan_summary['last_scan'] ) ) )
+                    esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $wpa11y_scan_summary['last_scan'] ) ) )
                 ); 
                 ?>
             </p>
             
             <div class="wpa11y-issue-breakdown">
                 <div class="wpa11y-issue-stat">
-                    <span class="wpa11y-issue-count wpa11y-error"><?php echo esc_html( $scan_summary['errors'] ); ?></span>
+                    <span class="wpa11y-issue-count wpa11y-error"><?php echo esc_html( $wpa11y_scan_summary['errors'] ); ?></span>
                     <span class="wpa11y-issue-label"><?php esc_html_e( 'Errors', 'free-wcag' ); ?></span>
                 </div>
                 <div class="wpa11y-issue-stat">
-                    <span class="wpa11y-issue-count wpa11y-warning"><?php echo esc_html( $scan_summary['warnings'] ); ?></span>
+                    <span class="wpa11y-issue-count wpa11y-warning"><?php echo esc_html( $wpa11y_scan_summary['warnings'] ); ?></span>
                     <span class="wpa11y-issue-label"><?php esc_html_e( 'Warnings', 'free-wcag' ); ?></span>
                 </div>
                 <div class="wpa11y-issue-stat">
-                    <span class="wpa11y-issue-count wpa11y-notice"><?php echo esc_html( $scan_summary['notices'] ); ?></span>
+                    <span class="wpa11y-issue-count wpa11y-notice"><?php echo esc_html( $wpa11y_scan_summary['notices'] ); ?></span>
                     <span class="wpa11y-issue-label"><?php esc_html_e( 'Notices', 'free-wcag' ); ?></span>
                 </div>
             </div>

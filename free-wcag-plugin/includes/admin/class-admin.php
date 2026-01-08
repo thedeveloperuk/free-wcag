@@ -52,6 +52,7 @@ class WPA11Y_Admin {
         if ( get_transient( 'wpa11y_activation_redirect' ) ) {
             delete_transient( 'wpa11y_activation_redirect' );
 
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This is a redirect check during activation, not a form submission.
             if ( ! isset( $_GET['activate-multi'] ) ) {
                 wp_safe_redirect( admin_url( 'admin.php?page=' . self::MENU_SLUG ) );
                 exit;

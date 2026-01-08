@@ -66,8 +66,8 @@ class WPA11Y_Activator {
                 sprintf(
                     /* translators: 1: Required PHP version, 2: Current PHP version */
                     esc_html__( 'Free WCAG Accessibility Suite requires PHP %1$s or higher. Your server is running PHP %2$s.', 'free-wcag' ),
-                    self::MIN_PHP_VERSION,
-                    PHP_VERSION
+                    esc_html( self::MIN_PHP_VERSION ),
+                    esc_html( PHP_VERSION )
                 ),
                 esc_html__( 'Plugin Activation Error', 'free-wcag' ),
                 [ 'back_link' => true ]
@@ -82,8 +82,8 @@ class WPA11Y_Activator {
                 sprintf(
                     /* translators: 1: Required WP version, 2: Current WP version */
                     esc_html__( 'Free WCAG Accessibility Suite requires WordPress %1$s or higher. You are running WordPress %2$s.', 'free-wcag' ),
-                    self::MIN_WP_VERSION,
-                    $wp_version
+                    esc_html( self::MIN_WP_VERSION ),
+                    esc_html( $wp_version )
                 ),
                 esc_html__( 'Plugin Activation Error', 'free-wcag' ),
                 [ 'back_link' => true ]

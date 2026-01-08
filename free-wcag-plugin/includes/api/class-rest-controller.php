@@ -284,10 +284,10 @@ class WPA11Y_REST_Controller {
         global $wpdb;
         $table = $wpdb->prefix . 'a11y_scan_results';
         
-        // Delete all unresolved issues from previous scans
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        // Delete all unresolved issues from previous scans.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table, clearing previous scan data.
         $wpdb->query(
-            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is safely constructed from wpdb prefix.
             "DELETE FROM `{$table}` WHERE resolved_at IS NULL"
         );
 
@@ -416,8 +416,9 @@ class WPA11Y_REST_Controller {
         $table = $wpdb->prefix . 'a11y_scan_results';
 
         // Check if table exists
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Checking table existence.
         $table_exists = $wpdb->get_var( $wpdb->prepare(
-            "SHOW TABLES LIKE %s",
+            'SHOW TABLES LIKE %s',
             $table
         ) );
 
@@ -435,17 +436,26 @@ class WPA11Y_REST_Controller {
             $where .= $wpdb->prepare( ' AND severity = %s', $severity );
         }
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table, fresh data needed for API.
         $results = $wpdb->get_results(
-            "SELECT r.*, p.post_title 
-            FROM $table r
-            LEFT JOIN {$wpdb->posts} p ON r.post_id = p.ID
-            WHERE $where
-            ORDER BY r.severity DESC, r.scanned_at DESC
-            LIMIT $per_page OFFSET $offset",
+            // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Variables are safely sanitized above.
+            $wpdb->prepare(
+                "SELECT r.*, p.post_title 
+                FROM {$table} r
+                LEFT JOIN {$wpdb->posts} p ON r.post_id = p.ID
+                WHERE {$where}
+                ORDER BY r.severity DESC, r.scanned_at DESC
+                LIMIT %d OFFSET %d",
+                $per_page,
+                $offset
+            ),
+            // phpcs:enable
             ARRAY_A
         );
 
-        $total = $wpdb->get_var( "SELECT COUNT(*) FROM $table WHERE $where" );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table, count query.
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table and where clause are safely constructed.
+        $total = $wpdb->get_var( "SELECT COUNT(*) FROM {$table} WHERE {$where}" );
 
         // Decode issue_data JSON
         foreach ( $results as &$result ) {
@@ -473,6 +483,7 @@ class WPA11Y_REST_Controller {
         $issue_id = absint( $request->get_param( 'issue_id' ) );
         $table    = $wpdb->prefix . 'a11y_scan_results';
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table update.
         $updated = $wpdb->update(
             $table,
             [ 'resolved_at' => current_time( 'mysql' ) ],
@@ -562,8 +573,10 @@ class WPA11Y_REST_Controller {
     private function export_json(): WP_REST_Response {
         global $wpdb;
 
-        $table   = $wpdb->prefix . 'a11y_scan_results';
-        $results = $wpdb->get_results( "SELECT * FROM $table ORDER BY scanned_at DESC", ARRAY_A );
+        $table = $wpdb->prefix . 'a11y_scan_results';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table export.
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is safely constructed from wpdb prefix.
+        $results = $wpdb->get_results( "SELECT * FROM {$table} ORDER BY scanned_at DESC", ARRAY_A );
 
         foreach ( $results as &$result ) {
             $result['issue_data'] = json_decode( $result['issue_data'], true );
@@ -588,10 +601,12 @@ class WPA11Y_REST_Controller {
     private function export_csv(): WP_REST_Response {
         global $wpdb;
 
-        $table   = $wpdb->prefix . 'a11y_scan_results';
+        $table = $wpdb->prefix . 'a11y_scan_results';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table export.
         $results = $wpdb->get_results(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is safely constructed from wpdb prefix.
             "SELECT r.*, p.post_title 
-            FROM $table r
+            FROM {$table} r
             LEFT JOIN {$wpdb->posts} p ON r.post_id = p.ID
             ORDER BY r.scanned_at DESC",
             ARRAY_A

@@ -11,12 +11,14 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$settings     = WPA11Y_Settings::get_settings();
-$modules      = WPA11Y_Dashboard::get_modules_display();
-$score        = WPA11Y_Dashboard::get_compliance_score( $settings );
-$level        = WPA11Y_Dashboard::get_compliance_level( $score );
-$scan_summary = WPA11Y_Dashboard::get_scan_summary();
-$quick_stats  = WPA11Y_Dashboard::get_quick_stats();
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template variables
+$wpa11y_settings     = WPA11Y_Settings::get_settings();
+$wpa11y_modules      = WPA11Y_Dashboard::get_modules_display();
+$wpa11y_score        = WPA11Y_Dashboard::get_compliance_score( $wpa11y_settings );
+$wpa11y_level        = WPA11Y_Dashboard::get_compliance_level( $wpa11y_score );
+$wpa11y_scan_summary = WPA11Y_Dashboard::get_scan_summary();
+$wpa11y_quick_stats  = WPA11Y_Dashboard::get_quick_stats();
+// phpcs:enable
 ?>
 
 <div id="wpa11y-admin" class="wpa11y-admin wrap" x-data="wpa11yAdmin()">
@@ -31,8 +33,8 @@ $quick_stats  = WPA11Y_Dashboard::get_quick_stats();
             <p class="wpa11y-version">v<?php echo esc_html( WPA11Y_VERSION ); ?></p>
         </div>
         
-        <div class="wpa11y-compliance-badge wpa11y-compliance-<?php echo esc_attr( $level ); ?>">
-            <span class="wpa11y-score"><?php echo esc_html( $score ); ?>%</span>
+        <div class="wpa11y-compliance-badge wpa11y-compliance-<?php echo esc_attr( $wpa11y_level ); ?>">
+            <span class="wpa11y-score"><?php echo esc_html( $wpa11y_score ); ?>%</span>
             <span class="wpa11y-label"><?php esc_html_e( 'WCAG 2.2 AA', 'free-wcag' ); ?></span>
         </div>
     </header>
@@ -42,15 +44,15 @@ $quick_stats  = WPA11Y_Dashboard::get_quick_stats();
         <div class="wpa11y-stat-card">
             <span class="dashicons dashicons-admin-page"></span>
             <div class="wpa11y-stat-content">
-                <span class="wpa11y-stat-value"><?php echo esc_html( $quick_stats['total_content'] ); ?></span>
+                <span class="wpa11y-stat-value"><?php echo esc_html( $wpa11y_quick_stats['total_content'] ); ?></span>
                 <span class="wpa11y-stat-label"><?php esc_html_e( 'Pages & Posts', 'free-wcag' ); ?></span>
             </div>
         </div>
         
-        <div class="wpa11y-stat-card <?php echo $quick_stats['images_without_alt'] > 0 ? 'wpa11y-stat-warning' : ''; ?>">
+        <div class="wpa11y-stat-card <?php echo $wpa11y_quick_stats['images_without_alt'] > 0 ? 'wpa11y-stat-warning' : ''; ?>">
             <span class="dashicons dashicons-format-image"></span>
             <div class="wpa11y-stat-content">
-                <span class="wpa11y-stat-value"><?php echo esc_html( $quick_stats['images_without_alt'] ); ?></span>
+                <span class="wpa11y-stat-value"><?php echo esc_html( $wpa11y_quick_stats['images_without_alt'] ); ?></span>
                 <span class="wpa11y-stat-label"><?php esc_html_e( 'Images Missing Alt', 'free-wcag' ); ?></span>
             </div>
         </div>
@@ -60,8 +62,8 @@ $quick_stats  = WPA11Y_Dashboard::get_quick_stats();
             <div class="wpa11y-stat-content">
                 <span class="wpa11y-stat-value">
                     <?php 
-                    if ( $scan_summary['last_scan'] ) {
-                        echo esc_html( human_time_diff( strtotime( $scan_summary['last_scan'] ) ) );
+                    if ( $wpa11y_scan_summary['last_scan'] ) {
+                        echo esc_html( human_time_diff( strtotime( $wpa11y_scan_summary['last_scan'] ) ) );
                     } else {
                         esc_html_e( 'Never', 'free-wcag' );
                     }
@@ -71,10 +73,10 @@ $quick_stats  = WPA11Y_Dashboard::get_quick_stats();
             </div>
         </div>
         
-        <div class="wpa11y-stat-card <?php echo $scan_summary['errors'] > 0 ? 'wpa11y-stat-error' : ''; ?>">
+        <div class="wpa11y-stat-card <?php echo $wpa11y_scan_summary['errors'] > 0 ? 'wpa11y-stat-error' : ''; ?>">
             <span class="dashicons dashicons-warning"></span>
             <div class="wpa11y-stat-content">
-                <span class="wpa11y-stat-value"><?php echo esc_html( $scan_summary['total_issues'] ); ?></span>
+                <span class="wpa11y-stat-value"><?php echo esc_html( $wpa11y_scan_summary['total_issues'] ); ?></span>
                 <span class="wpa11y-stat-label"><?php esc_html_e( 'Issues Found', 'free-wcag' ); ?></span>
             </div>
         </div>
@@ -108,58 +110,58 @@ $quick_stats  = WPA11Y_Dashboard::get_quick_stats();
     <!-- Modules Tab -->
     <div x-show="activeTab === 'modules'" class="wpa11y-tab-content">
         <div class="wpa11y-modules-grid">
-            <?php foreach ( $modules as $module_id => $module ) : ?>
+            <?php foreach ( $wpa11y_modules as $wpa11y_module_id => $wpa11y_module ) : ?>
             <article class="wpa11y-module-card" 
-                     :class="{ 'is-disabled': !settings.<?php echo esc_attr( $module_id ); ?>?.enabled }">
+                     :class="{ 'is-disabled': !settings.<?php echo esc_attr( $wpa11y_module_id ); ?>?.enabled }">
                 
                 <header class="wpa11y-module-header">
                     <div class="wpa11y-module-icon">
-                        <span class="dashicons dashicons-<?php echo esc_attr( $module['icon'] ); ?>"></span>
+                        <span class="dashicons dashicons-<?php echo esc_attr( $wpa11y_module['icon'] ); ?>"></span>
                     </div>
                     
                     <div class="wpa11y-module-info">
                         <h2>
-                            <?php echo esc_html( $module['title'] ); ?>
-                            <?php if ( ! empty( $module['badge'] ) ) : ?>
-                            <span class="wpa11y-badge wpa11y-badge-<?php echo esc_attr( $module['badge'] ); ?>">
-                                <?php echo esc_html( ucfirst( $module['badge'] ) ); ?>
+                            <?php echo esc_html( $wpa11y_module['title'] ); ?>
+                            <?php if ( ! empty( $wpa11y_module['badge'] ) ) : ?>
+                            <span class="wpa11y-badge wpa11y-badge-<?php echo esc_attr( $wpa11y_module['badge'] ); ?>">
+                                <?php echo esc_html( ucfirst( $wpa11y_module['badge'] ) ); ?>
                             </span>
                             <?php endif; ?>
                         </h2>
-                        <p><?php echo esc_html( $module['description'] ); ?></p>
+                        <p><?php echo esc_html( $wpa11y_module['description'] ); ?></p>
                     </div>
                     
                     <label class="wpa11y-master-switch">
                         <span class="screen-reader-text">
                             <?php 
                             /* translators: %s: Module name */
-                            printf( esc_html__( 'Enable %s module', 'free-wcag' ), $module['title'] ); 
+                            printf( esc_html__( 'Enable %s module', 'free-wcag' ), esc_html( $wpa11y_module['title'] ) ); 
                             ?>
                         </span>
                         <input type="checkbox" 
-                               x-model="settings.<?php echo esc_attr( $module_id ); ?>.enabled"
+                               x-model="settings.<?php echo esc_attr( $wpa11y_module_id ); ?>.enabled"
                                @change="saveSettings()">
                         <span class="wpa11y-switch-slider"></span>
                     </label>
                 </header>
                 
                 <div class="wpa11y-module-features" 
-                     :class="{ 'is-disabled': !settings.<?php echo esc_attr( $module_id ); ?>?.enabled }">
-                    <?php foreach ( $module['features'] as $feature_id => $feature_label ) : ?>
+                     :class="{ 'is-disabled': !settings.<?php echo esc_attr( $wpa11y_module_id ); ?>?.enabled }">
+                    <?php foreach ( $wpa11y_module['features'] as $wpa11y_feature_id => $wpa11y_feature_label ) : ?>
                     <label class="wpa11y-feature-toggle">
                         <input type="checkbox" 
-                               x-model="settings.<?php echo esc_attr( $module_id ); ?>.features.<?php echo esc_attr( $feature_id ); ?>"
-                               :disabled="!settings.<?php echo esc_attr( $module_id ); ?>?.enabled"
+                               x-model="settings.<?php echo esc_attr( $wpa11y_module_id ); ?>.features.<?php echo esc_attr( $wpa11y_feature_id ); ?>"
+                               :disabled="!settings.<?php echo esc_attr( $wpa11y_module_id ); ?>?.enabled"
                                @change="saveSettings()">
                         <span class="wpa11y-switch-slider wpa11y-switch-small"></span>
-                        <span class="wpa11y-feature-label"><?php echo esc_html( $feature_label ); ?></span>
+                        <span class="wpa11y-feature-label"><?php echo esc_html( $wpa11y_feature_label ); ?></span>
                     </label>
                     <?php endforeach; ?>
                 </div>
                 
                 <footer class="wpa11y-module-footer">
                     <span class="wpa11y-wcag-badge" title="<?php esc_attr_e( 'WCAG criteria addressed', 'free-wcag' ); ?>">
-                        <?php echo esc_html( $module['wcag'] ); ?>
+                        <?php echo esc_html( $wpa11y_module['wcag'] ); ?>
                     </span>
                 </footer>
             </article>
@@ -289,9 +291,9 @@ $quick_stats  = WPA11Y_Dashboard::get_quick_stats();
         <div class="wpa11y-footer-left">
             <p>
                 <?php 
-                /* translators: %s: Plugin documentation URL */
                 printf( 
                     wp_kses( 
+                        /* translators: %s: Plugin documentation URL */
                         __( 'Need help? Check the <a href="%s" target="_blank">documentation</a>.', 'free-wcag' ),
                         [ 'a' => [ 'href' => [], 'target' => [] ] ]
                     ),

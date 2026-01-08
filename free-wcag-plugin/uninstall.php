@@ -40,22 +40,26 @@ function wpa11y_uninstall_cleanup() {
     delete_transient( 'wpa11y_activation_redirect' );
     delete_transient( 'wpa11y_scan_in_progress' );
 
-    // Clean up any scan transients
+    // Clean up any scan transients.
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Cleanup on uninstall.
     $wpdb->query(
         "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_wpa11y_scan_%'"
     );
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Cleanup on uninstall.
     $wpdb->query(
         "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_wpa11y_scan_%'"
     );
 
-    // Drop custom tables
+    // Drop custom tables.
     $tables = [
         $wpdb->prefix . 'a11y_scan_results',
         $wpdb->prefix . 'a11y_scan_history',
     ];
 
     foreach ( $tables as $table ) {
-        $wpdb->query( "DROP TABLE IF EXISTS {$table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- Dropping tables on uninstall.
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is safely constructed from wpdb prefix.
+        $wpdb->query( "DROP TABLE IF EXISTS {$table}" );
     }
 
     // Clear any scheduled cron events

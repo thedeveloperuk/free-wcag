@@ -5,10 +5,10 @@
  * Description:       A comprehensive accessibility toolkit for WCAG 2.2 Level AA compliance. Features a user-facing toolbar, automated remediation, and content auditing.
  * Version:           1.0.0
  * Requires at least: 6.0
- * Tested up to:      6.4
+ * Tested up to:      6.9
  * Requires PHP:      8.0
  * Author:            Developer
- * Author URI:        https://developer.example.com/
+ * Author URI:        https://thedeveloper.co.uk/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       free-wcag
@@ -115,16 +115,14 @@ final class WP_Accessibility_Suite {
     /**
      * Set plugin locale for translations.
      *
+     * Note: Since WordPress 4.6, translations are automatically loaded
+     * from wordpress.org when the plugin is hosted there.
+     *
      * @return void
      */
     private function set_locale(): void {
-        add_action( 'plugins_loaded', function() {
-            load_plugin_textdomain(
-                'free-wcag',
-                false,
-                dirname( WPA11Y_PLUGIN_BASENAME ) . '/languages/'
-            );
-        });
+        // Translations are now auto-loaded by WordPress 4.6+ when hosted on wordpress.org.
+        // Manual load_plugin_textdomain() is no longer necessary.
     }
 
     /**
