@@ -17,7 +17,7 @@ WordPress accessibility toolkit aimed at WCAG 2.2 Level AA. It combines a user-f
 
 ## Requirements
 - WordPress 6.0+
-- PHP 8.0+
+- PHP 7.4+
 - Modern browser (Chrome, Firefox, Safari, Edge)
 
 ## Installation

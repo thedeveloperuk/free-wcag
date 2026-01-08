@@ -19,7 +19,7 @@ class WPA11Y_Activator {
     /**
      * Minimum PHP version.
      */
-    const MIN_PHP_VERSION = '8.0';
+    const MIN_PHP_VERSION = '7.4';
 
     /**
      * Minimum WordPress version.

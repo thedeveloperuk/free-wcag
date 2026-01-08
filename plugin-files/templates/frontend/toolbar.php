@@ -271,7 +271,7 @@ if ( ! defined( 'ABSPATH' ) ) {
             <button type="button" class="wpa11y-reset" data-action="reset">
                 <?php esc_html_e( 'Reset All Settings', 'free-wcag' ); ?>
             </button>
-            <a href="http://thedeveloper.co.uk/wcag/" 
+            <a href="https://thedeveloper.co.uk/free-wcag" 
                target="_blank" 
                rel="noopener noreferrer" 
                class="wpa11y-credit">
